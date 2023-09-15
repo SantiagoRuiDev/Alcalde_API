@@ -1,5 +1,5 @@
 import { connectDatabase } from '../database/db.js';
-import bcrypt, { compare } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 export async function encryptPassword (password) {
     const salt = await bcrypt.genSalt(10);

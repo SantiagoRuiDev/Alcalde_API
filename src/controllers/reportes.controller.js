@@ -1,4 +1,6 @@
 import * as reportesModel from '../models/reportes.model.js';
+import * as config from '../libs/config.js';
+import jwt from 'jsonwebtoken';
 import debug from 'debug';
 
 const printMessage = debug('app:reportes-controller');
@@ -16,8 +18,12 @@ export const getReportes = async (req, res) => {
 
 export const createReporte = async (req, res) => {
     try {
-        const {id_usuario, id_foro, id_articulo, id_resena, id_reportante} = req.body;
-        const data = {id_usuario, id_foro, id_articulo, id_resena, id_reportante};
+        const token = req.headers["x-access-token"];
+        const decoded = jwt.verify(token, config.secret);
+        const reportante = decoded.id;
+
+        const {id_usuario, id_foro, id_articulo, id_resena} = req.body;
+        const data = {id_usuario: id_usuario, id_foro: id_foro, id_articulo: id_articulo, id_resena: id_resena, id_reportante: reportante};
         const reporte = await reportesModel.createReporte(data);
         
         if(reporte.affectedRows === 0) return res.json({error: "No se pudo ingresar un nuevo reporte"});

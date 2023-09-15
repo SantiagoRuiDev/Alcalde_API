@@ -7,7 +7,7 @@ import { encryptPassword, comparePassword } from '../libs/password.js';
 
 export const getUsuarios = async () => {
     const connection = await connectDatabase();
-    const [rows] = await connection.execute('SELECT * FROM usuarios');
+    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE rol != "superadmin"');
     return rows;
 }
 
