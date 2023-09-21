@@ -19,6 +19,13 @@ export const getResenaById = async (req, res) => {
     return res.status(400).json({"error": "No existe la reseña"});
 }
 
+export const getResenaInfoById = async (req, res) => {
+    const resena = await resenasModel.getResenaInfoById(req.params.id);
+    printMessage("Se intento acceder a una reseña exitosamente");
+    if(resena.length > 0) return res.status(200).json(resena);
+    return res.status(400).json({"error": "No existe la reseña"});
+}
+
 export const createResena = async (req, res) => {
 
     const token = req.headers["x-access-token"];

@@ -14,6 +14,13 @@ export const getResenaById = async (id) => {
     return [result[0], details[0]];
 }
 
+export const getResenaInfoById = async (id) => {
+    const connection = await connectDatabase();
+    const [result] = await connection.query("SELECT * FROM resena WHERE id = ?", [id]);
+
+    return [result[0]];
+}
+
 export const createResena = async (data) => {
     const connection = await connectDatabase();
 

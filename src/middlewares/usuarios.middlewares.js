@@ -36,6 +36,8 @@ export const validarLogin = async (req, res, next) => {
 
     if(isExpired) return res.status(404).json({error: 'El token ya ha expirado'});
 
+    req.id = decoded.id;
+
     next();
 }   
 
@@ -49,7 +51,7 @@ export const validarModerador = async (req, res, next) => {
 
     if(result[0].rol == 'moderador' || result[0].rol == 'admin' || result[0].rol == 'superadmin')  return next();
 
-    return res.json({error: 'No tienes permisos para realizar esta acción'});
+    return res.status(403).json({error: 'No tienes permisos para realizar esta acción'});
 };
 
 export const validarAdmin = async (req, res, next) => {
@@ -62,7 +64,7 @@ export const validarAdmin = async (req, res, next) => {
 
     if(result[0].rol == 'superadmin' || result[0].rol == 'admin')  return next();
 
-    return res.json({error: 'No tienes permisos para realizar esta acción'});
+    return res.status(403).json({error: 'No tienes permisos para realizar esta acción'});
 };
 
 
@@ -76,7 +78,7 @@ export const validarSuperAdmin = async (req, res, next) => {
 
     if(result[0].rol == 'superadmin')  return next();
 
-    return res.json({error: 'No tienes permisos para realizar esta acción'});
+    return res.status(403).json({error: 'No tienes permisos para realizar esta acción'});
 };
 
 
