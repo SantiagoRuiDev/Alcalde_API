@@ -17,6 +17,7 @@ import { router as articulosRouter } from './routes/articulos.routes.js';
 import { router as resenasRouter } from './routes/resenas.routes.js';
 import { router as calificacionesRouter } from './routes/calificaciones.routes.js';
 import { router as listasRouter } from './routes/listas.routes.js';
+import { router as forosRouter } from './routes/foros.routes.js';
 
 // Llamamos dependencias aqui arriba.
 
@@ -39,6 +40,7 @@ app.use('/api/articulos', articulosRouter);
 app.use('/api/resenas', resenasRouter);
 app.use('/api/listas', listasRouter);
 app.use('/api/versus', versusRouter);
+app.use('/api/foros', forosRouter);
 
 
 // Listamos el servidor. En el puerto 3000 de nuestro http://localhost:{puerto}

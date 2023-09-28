@@ -53,3 +53,43 @@ export const getVersusById = async (req, res) => {
     }
 }
 
+
+export const votarVersus = async (req, res) => {
+    try {
+        const data = { id_versus: req.params.id, id_coche: req.body.id_coche, id_usuario: req.id };
+
+        const votoExist = await versusModel.getVotoById(data.id_versus, data.id_usuario);
+
+        if(votoExist.length > 0) return res.status(400).json({"error": "No puedes votar dos veces"})
+
+        const newVoto = await versusModel.voteVersus(data);
+
+        printMessage('Voto realizado correctamente');
+        if(newVoto > 0) return res.status(200).json({"message": "Voto realizado correctamente"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
+export const actualizarVoto = async (req, res) => {
+    try {
+        const data = { id_coche: req.body.id_coche, id_usuario: req.id };
+        const newVoto = await versusModel.updateVotoById(req.params.id, data);
+
+        printMessage('Voto realizado correctamente');
+        if(newVoto > 0) return res.status(200).json({"message": "Voto realizado correctamente"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+export const getVotoById = async (req, res) => {
+    try {
+        const foundVoto = await versusModel.updateVotoById(req.params.id ,req.id);
+
+        return foundVoto;
+    } catch (error) {
+        printMessage(error);
+    }
+}
