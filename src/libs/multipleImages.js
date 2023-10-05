@@ -1,3 +1,4 @@
+
 import multer from 'multer';
 import path from 'path';
 
@@ -38,24 +39,25 @@ const storage = multer.diskStorage({
       cb(null, Date.now() + '-' + file.originalname);
     },
   });
+  
+  // Cambia upload.single() a upload.array() para permitir múltiples archivos
+  const multiple = multer({ storage }); // Puedes cambiar 'images' al nombre de campo que desees y 5 es el número máximo de archivos permitidos en una solicitud
+  
 
-const upload = multer({ storage })
-
-
-export const uploadImage = (imageFieldName) => {
-  return (req, res, next) => {
-    upload.single(imageFieldName)(req, res, (err) => {
-      if (err) {
-        return next(err);
-      }
-
-      // Construir la URL de la imagen basada en la configuración de storage
-      const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-
-      req.imageUrl = imageUrl;
-
-      // Continúa con el siguiente middleware o manejo de la ruta
-      next();
-    });
+  export const uploadImages = (imageFieldName) => {
+    return (req, res, next) => {
+      multiple.array(imageFieldName, 5)(req, res, (err) => {
+        if (err) {
+          return next(err);
+        }
+  
+        // Construir un array de URLs de imágenes basadas en la configuración de storage
+        const imageUrls = req.files.map(file => `${req.protocol}://${req.get('host')}/${file.path}`);
+  
+        req.imageUrls = imageUrls;
+  
+        // Continúa con el siguiente middleware o manejo de la ruta
+        next();
+      });
+    };
   };
-};

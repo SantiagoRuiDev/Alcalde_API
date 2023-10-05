@@ -30,6 +30,13 @@ export const getVotoById = async (versus, id) => {
 }
 
 
+export const getVotosInVersus = async (id) => {
+    const connection = await connectDatabase();
+    const [voto] = await connection.query("SELECT id_versus, id_coche, SUM(Punto) AS PuntosTotales FROM versus_votos GROUP BY id_versus, id_coche HAVING id_versus = ?", [id]);
+
+    return voto;
+}
+
 export const updateVotoById = async (id, data) => {
     const connection = await connectDatabase();
     const [deleted] = await connection.query("DELETE FROM versus_votos WHERE id_versus = ?;", [id]);

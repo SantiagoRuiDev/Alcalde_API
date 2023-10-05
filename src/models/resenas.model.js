@@ -52,6 +52,6 @@ export const searchResena = async (search) => {
     const connection = await connectDatabase();
     const query = 'SELECT * FROM resena WHERE titulo LIKE ?';
     
-    const [result] = await connection.query(query, [`${search}%`]);
+    const [result] = await connection.query(query, [`%${search}%`]);
     return result;
 }

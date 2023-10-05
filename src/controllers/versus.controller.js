@@ -15,6 +15,7 @@ export const createVersus = async (req, res) => {
         formDataObject[key] = value;
         }
 
+
         const resenas = JSON.parse(formDataObject.resenas);
         const data = {
             imagen: req.imageUrl,
@@ -53,6 +54,16 @@ export const getVersusById = async (req, res) => {
     }
 }
 
+
+export const getVotosInVersus = async (req, res) => {
+    try {
+        const votos = await versusModel.getVotosInVersus(req.params.id);
+        printMessage('Votos obtenidos correctamente');
+        return res.status(200).json(votos);
+    } catch (error) {
+        printMessage(error);
+    }
+}
 
 export const votarVersus = async (req, res) => {
     try {
