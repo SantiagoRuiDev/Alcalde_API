@@ -44,14 +44,8 @@ export const crearArticulo = async (req, res) => {
                        id_usuario: decoded.id,
                        titulo: formDataObject.titulo,
                        subtitulo: formDataObject.subtitulo, 
-                       descripcion: formDataObject.descripcion, 
-                       images: {
-                            image1: req.imageUrls[4] || "",
-                            image2: req.imageUrls[3] || "",
-                            image3: req.imageUrls[2] || "",
-                            image4: req.imageUrls[1] || "",
-                            portada: req.imageUrls[0] || ""
-                       }
+                       contenido: formDataObject.contenido, 
+                        portada: req.imageUrl
                     };
 
         const newArticulo = await articulosModel.crearArticulo(data);

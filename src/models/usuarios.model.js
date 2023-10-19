@@ -18,14 +18,10 @@ export const createUsuario = async (usuario) => {
     const encryptedPass = await encryptPassword(contraseña); // Llamamos al metodo para encriptar la contraseña.
 
     const connection = await connectDatabase(); // Conectamos a la db.
-
-    const [userExists] = await connection.execute('SELECT * FROM usuarios WHERE correo = ?', [correo]); // Buscamos si existe ya este correo registrado
-
-    if(userExists.length > 0) return false; // Si el usuario existe retorna falso.
  
     const query = 'INSERT INTO usuarios (nombre, correo, ciudad, contraseña) VALUES (?, ?, ?, ?)';
     const [result] = await connection.execute(query, [nombre, correo, ciudad, encryptedPass]);
-    return result; // Si el usuario no existe procede a crear uno nuevo
+    return result.affectedRows; // Si el usuario no existe procede a crear uno nuevo
 }
 
 export const loginUsuario = async (usuario) => {
@@ -110,4 +106,34 @@ export const getUsuarioByID = async (id) => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('SELECT * FROM usuarios WHERE id = ?', [id]);
     return rows;
+}
+
+export const getUsuarioByCorreo = async (correo) => {
+    const connection = await connectDatabase();
+    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE correo = ?', [correo]);
+    return rows;
+}
+
+
+export const getUsuarioByCode = async (code) => {
+    const connection = await connectDatabase();
+    const [rows] = await connection.execute('SELECT * FROM codigos WHERE codigo = ?', [code]);
+    return rows;
+}
+
+
+export const saveRecoverCode = async (id, code) => {
+    const connection = await connectDatabase();
+    const [rows] = await connection.execute('INSERT INTO codigos(id_usuario, codigo) VALUES (?, ?)', [id, code]);
+
+    return rows.affectedRows;
+}
+
+export const changePass = async (id, pass) => {
+    const connection = await connectDatabase();
+    const hash = await encryptPassword(pass);
+    const [rows] = await connection.execute('UPDATE usuarios SET contraseña = ? WHERE id = ?', [hash, id]);
+
+    const [deleteCode] = await connection.execute('DELETE FROM codigos WHERE id_usuario = ?', [id]);
+    return rows.affectedRows;
 }

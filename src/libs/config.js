@@ -20,3 +20,8 @@ export const correo = process.env.CORREO;
 export const ciudad = process.env.CIUDAD;
 export const rol = process.env.ROL;
 export const contraseña = process.env.CONTRA;
+
+export const SMTP_PASSWORD = process.env.SMTP_PASSWORD
+export const SMTP_USER = process.env.SMTP_USER
+export const SMTP_HOST = process.env.SMTP_HOST
+export const SMTP_EMAIL = process.env.SMTP_EMAIL

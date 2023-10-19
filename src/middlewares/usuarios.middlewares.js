@@ -101,7 +101,7 @@ export const usuarioAdministrador = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
 
-    if(result[0].rol=='admin' || result[0].rol=='superadmin') return res.json({admin: true});
+    if(result[0].rol=='moderador' || result[0].rol=='admin' || result[0].rol=='superadmin') return res.json({admin: true});
 
     return res.json({admin: false});
 }

@@ -1,13 +1,12 @@
-import express from 'express';
 import debug from 'debug';
 import jwt from 'jsonwebtoken';
-const printMessage = debug('app:usuarios-controller');
-
+import * as usuarioModel from '../models/usuarios.model.js';
 import * as config from '../libs/config.js';
+import sendPassRecover from '../libs/mailto.js';
 
 const secret_key = config.secret;
+const printMessage = debug('app:usuarios-controller');
 
-import * as usuarioModel from '../models/usuarios.model.js';
 // Definimos funciones.
 
 // Con esta funcion vemos todos los usuarios existentes.
@@ -32,16 +31,34 @@ export const getUsuarioByID = async (req, res) => {
     }
 }
 
+const testEmail = async (correo) => {
+    const regex = /\S+@\S+\.\S+/;
+    return regex.test(correo);
+}
+
 // Esta funcion crea el usuario nuevo
 export const createUsuario = async (req,res) => {
     try {
         const { nombre, correo, ciudad, contraseña } = req.body;
 
         const usuario = {nombre, correo, ciudad, contraseña}; // Destructuramos los datos que enviamos desde el frontend
+
+        if(contraseña == "12345678") return res.status(400).json({error: 'La contraseña es muy insegura'});
+        if(contraseña.length < 8) return res.status(400).json({error: 'La contraseña debe tener al menos 8 caracteres'});
+
+        if(!testEmail(correo)) return res.status(400).json({error: 'El correo no es valido'});
+
+        if(nombre.length < 3) return res.status(400).json({error: 'El nombre debe tener al menos 3 caracteres'});
+
+        if(nombre.ciudad < 3) return res.status(400).json({error: 'La ciudad debe tener al menos 3 caracteres'});
+
+        const exist = await usuarioModel.getUsuarioByCorreo(correo); // Preguntamos si existe
+
+        if(exist.length > 0) return res.status(409).json({error: 'El usuario ya existe'}); // Si existe, devolvemos un error.
     
         const result = await usuarioModel.createUsuario(usuario); // Llamamos el modelo a crear
     
-        if(result.affectedRows != 0) { // Si el resultado es indiferente a falso, devolvemos un token para autentificar.
+        if(result > 0) { // Si el resultado es indiferente a falso, devolvemos un token para autentificar.
             const firstLogin = await usuarioModel.loginUsuario(usuario); // Llamamos el modelo para logear.
 
             if(firstLogin[0].id === undefined) return res.status(404).json({error: 'Usuario no encontrado o credenciales incorrectas'}); // Si el resultado es indefinido, devolvemos error.
@@ -52,7 +69,6 @@ export const createUsuario = async (req,res) => {
         };
         
         printMessage('Un usuario intento crear una cuenta que ya existe');
-        return res.status(409).json({error: 'El usuario ya existe'}); // Si el resultado es falso devolvemos un error.    
     } catch (error) {
         printMessage(error);
     }
@@ -70,6 +86,44 @@ export const loginUsuario = async (req, res) => {
         const token = jwt.sign({id: result[0].id}, secret_key, {expiresIn: 86400});
             printMessage('Un usuario accedio correctamente a su cuenta');
             return res.json(token);// Si no, creamos un token  y lo retornamos
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
+export const recoverPass = async (req, res) => {
+    try {
+        const { correo } = req.body;
+        const result = await usuarioModel.getUsuarioByCorreo(correo);
+        if(result[0].id === undefined) return res.status(404).json({error: 'Usuario no encontrado'});
+
+        const code = Math.floor(Math.random() * (999999 - 100000)) + 100000;
+        const saveCode = await usuarioModel.saveRecoverCode(result[0].id, code);
+
+        if(saveCode > 0)
+            sendPassRecover(result[0].correo, code);
+            return res.status(200).json({success: 'Se ha enviado un correo con el codigo de recuperacion'});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+export const compareChangePass = async (req, res) => {
+    try {
+        const { newPass, codigo } = req.body;
+        const result = await usuarioModel.getUsuarioByCode(codigo);
+
+        if(newPass.length < 8) return res.status(400).json({error: 'La contraseña debe tener al menos 8 caracteres'});
+
+        if(result.length > 0){
+            if(result[0].codigo == codigo){
+                const savePass = await usuarioModel.changePass(result[0].id_usuario, newPass);
+                if(savePass > 0) return res.status(200).json({success: 'Contraseña cambiada correctamente'});
+            }
+        }
+        return res.status(404).json({error: 'Codigo invalido'});
+
     } catch (error) {
         printMessage(error);
     }

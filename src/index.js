@@ -13,6 +13,7 @@ import { router as reportesRouter } from './routes/reportes.routes.js';
 import { router as versusRouter } from './routes/versus.routes.js';
 import { router as strikesRouter } from './routes/strikes.routes.js';
 import { router as quejasRouter } from './routes/quejas.routes.js';
+import { router as comunicadosRoutes } from './routes/comunicados.routes.js';
 import { router as articulosRouter } from './routes/articulos.routes.js';
 import { router as resenasRouter } from './routes/resenas.routes.js';
 import { router as calificacionesRouter } from './routes/calificaciones.routes.js';
@@ -41,6 +42,7 @@ app.use('/api/resenas', resenasRouter);
 app.use('/api/listas', listasRouter);
 app.use('/api/versus', versusRouter);
 app.use('/api/foros', forosRouter);
+app.use('/api/comunicados', comunicadosRoutes);
 
 
 // Listamos el servidor. En el puerto 3000 de nuestro http://localhost:{puerto}
