@@ -3,7 +3,7 @@ import { connectDatabase } from '../database/db.js';
 
 export const getReportes = async () => {
     const connection = await connectDatabase();
-    const [result] = await connection.execute('SELECT * FROM reportes');
+    const [result] = await connection.execute('SELECT u.nombre, r.id_usuario, r.id_foro, r.id_articulo, r.id_resena, r.id_reportante FROM reportes as r INNER JOIN usuarios as u ON r.id_usuario = u.id');
     return result;
 }
 

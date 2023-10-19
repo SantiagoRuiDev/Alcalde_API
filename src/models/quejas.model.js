@@ -2,7 +2,7 @@ import { connectDatabase } from "../database/db.js";
 
 export const listarQuejas = async () => {
     const connection = await connectDatabase();
-    const [result] = await connection.execute('SELECT * FROM quejas');
+    const [result] = await connection.execute('SELECT u.nombre, q.id, q.mensaje FROM quejas as q INNER JOIN usuarios as u ON q.usuario_id = u.id');
     return result;
 }
 

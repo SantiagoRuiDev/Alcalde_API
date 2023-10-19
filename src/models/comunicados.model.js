@@ -2,7 +2,7 @@ import { connectDatabase } from '../database/db.js';
 
 export const getComunicados = async () => {
     const connection = await connectDatabase();
-    const [rows] = await connection.execute('SELECT c.titulo, c.mensaje, u.nombre, c.id, c.fecha FROM comunicados AS c INNER JOIN usuarios AS u ON c.id_autor = u.id ORDER BY c.id DESC LIMIT 3;');
+    const [rows] = await connection.execute('SELECT c.titulo, c.mensaje, u.nombre, c.id, c.fecha FROM comunicados AS c INNER JOIN usuarios AS u ON c.id_autor = u.id ORDER BY c.id DESC LIMIT 1;');
 
     return rows;
 }
