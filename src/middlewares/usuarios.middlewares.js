@@ -41,6 +41,19 @@ export const validarLogin = async (req, res, next) => {
     next();
 }   
 
+export const validarEscritor = async (req, res, next) => {
+    const token = req.headers['x-access-token'];
+
+    const decoded = jwt.verify(token, secret_key);
+
+    const connection = await connectDatabase();
+    const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
+
+    if(result[0].rol == 'escritor' || result[0].rol == 'moderador' || result[0].rol == 'admin' || result[0].rol == 'superadmin')  return next();
+
+    return res.status(403).json({"error": 'No tienes permisos para realizar esta acción'});
+};
+
 export const validarModerador = async (req, res, next) => {
     const token = req.headers['x-access-token'];
 

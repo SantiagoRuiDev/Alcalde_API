@@ -42,7 +42,13 @@ export const listarForo = async (req, res) => {
 
 export const createMensaje = async (req, res) => {
     try {
-        const data = { id_usuario: req.id, id_foro: req.params.id, mensaje: req.body.mensaje };
+        let data;
+        if(Array.isArray(req.body.mensaje)) {
+            req.body.mensaje.reverse();
+            data = { id_usuario: req.id, id_foro: req.params.id, mensaje: req.body.mensaje[0], imagen: req.imageUrl };
+        }else {
+            data = { id_usuario: req.id, id_foro: req.params.id, mensaje: req.body.mensaje, imagen: req.imageUrl };
+        }
         const newMensaje = await forosModel.createMensaje(data);
     
         if(newMensaje > 0) return res.status(200).json({"message": "Mensaje creado correctamente"});
@@ -53,6 +59,21 @@ export const createMensaje = async (req, res) => {
     }
 }
 
+
+export const deleteMensaje = async (req, res) => {
+    try {
+        const data = { id: req.params.id };
+        const deleted = await forosModel.deleteMensaje(data);
+    
+        if(deleted > 0) return res.status(200).json({"message": "Mensaje eliminado correctamente"});
+
+        return res.status(400).json({"message": "No se pudo crear el mensaje"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
 export const eliminarForo = async (req, res) => {
     try {
         const { id } = req.params;
@@ -61,6 +82,46 @@ export const eliminarForo = async (req, res) => {
         if(deletedForo > 0) return res.status(200).json({"message": "Foro eliminado correctamente"});
 
         return res.status(400).json({"message": "No se pudo eliminar el foro"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
+export const createRegla = async (req, res) => {
+    try {
+        const { nombre, contenido } = req.body;
+
+        const data = { nombre, contenido };
+        const newRegla = await forosModel.crearRegla(data);
+
+        return (newRegla > 0) ? res.status(200).json({"message": "Regla creada correctamente"}) 
+                              : res.status(400).json({"message": "No se pudo crear la regla"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
+export const deleteRegla = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deleted = await forosModel.eliminarRegla(id);
+
+        return (deleted > 0) ? res.status(200).json({"message": "Regla eliminada correctamente"}) 
+                              : res.status(400).json({"message": "No se pudo eliminada la regla"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
+export const getReglas = async (req, res) => {
+    try {
+        console.log(1)
+        const reglas = await forosModel.getReglas();
+        return res.status(200).json(reglas)
     } catch (error) {
         printMessage(error);
     }

@@ -68,6 +68,8 @@ export const ascenderUsuario = async (id) => {
     let newRol = "";
 
     if(userRol[0].rol === "usuario"){
+        newRol = "escritor";
+    } else if(userRol[0].rol === "escritor") {
         newRol = "moderador";
     } else if(userRol[0].rol === "moderador") {
         newRol = "admin";
@@ -88,10 +90,12 @@ export const degradarUsuario = async (id) => {
     const [userRol] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [id]);
     let newRol = "";
 
-    if(userRol[0].rol === "moderador"){
-        newRol = "usuario";
-    } else if(userRol[0].rol === "admin") {
+    if(userRol[0].rol === "admin"){
         newRol = "moderador";
+    } else if(userRol[0].rol === "moderador") {
+        newRol = "escritor";
+    } else if(userRol[0].rol === "escritor") {
+        newRol = "usuario";
     } else {
         return 0;
     }

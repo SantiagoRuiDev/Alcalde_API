@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-10-2023 a las 05:52:54
+-- Tiempo de generación: 26-10-2023 a las 04:04:01
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -37,6 +37,13 @@ CREATE TABLE `articulos` (
   `portada` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `articulos`
+--
+
+INSERT INTO `articulos` (`id`, `id_usuario`, `titulo`, `subtitulo`, `contenido`, `fecha`, `portada`) VALUES
+(12, 23, 'Escrito desde cuenta de escritor', 'Wazaaaa', '<p>Megatrueno</p>', '2023-10-24', 'http://localhost:3000/images/1698156662366-marco.png');
+
 -- --------------------------------------------------------
 
 --
@@ -56,7 +63,7 @@ CREATE TABLE `calificaciones` (
 
 INSERT INTO `calificaciones` (`id`, `id_usuario`, `id_resena`, `calificacion`) VALUES
 (1, 7, 5, 3),
-(2, 7, 6, 5),
+(2, 7, 6, 4),
 (3, 7, 7, 1),
 (4, 23, 5, 2),
 (5, 23, 6, 5),
@@ -105,6 +112,14 @@ CREATE TABLE `codigos` (
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `codigos`
+--
+
+INSERT INTO `codigos` (`id`, `codigo`, `id_usuario`) VALUES
+(4, 216412, 26),
+(5, 668162, 26);
+
 -- --------------------------------------------------------
 
 --
@@ -125,7 +140,8 @@ CREATE TABLE `comunicados` (
 
 INSERT INTO `comunicados` (`id`, `id_autor`, `titulo`, `mensaje`, `fecha`) VALUES
 (1, 7, 'Cambios en sistema de foros.', 'Se agregara la opcion de enviar imagenes.', '2023-10-16'),
-(2, 7, 'Proximos Eventos', 'Se haran eventos por epocas festivos, sorteos de creditos.', '2023-10-16');
+(2, 7, 'Proximos Eventos', 'Se haran eventos por epocas festivos, sorteos de creditos.', '2023-10-16'),
+(3, 7, 'Cambios del sistema', 'Proximos cambios', '2023-10-19');
 
 -- --------------------------------------------------------
 
@@ -210,18 +226,19 @@ CREATE TABLE `mensajes` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_foro` int(11) NOT NULL,
-  `mensaje` varchar(1500) NOT NULL
+  `mensaje` varchar(1500) NOT NULL,
+  `imagen` varchar(130) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `mensajes`
 --
 
-INSERT INTO `mensajes` (`id`, `id_usuario`, `id_foro`, `mensaje`) VALUES
-(1, 7, 1, 'Buenas chat'),
-(2, 7, 1, 'Soy santi'),
-(3, 24, 1, 'Que tal admin?'),
-(4, 7, 2, 'Buenas');
+INSERT INTO `mensajes` (`id`, `id_usuario`, `id_foro`, `mensaje`, `imagen`) VALUES
+(1, 7, 1, 'Buenas chat', ''),
+(2, 7, 1, 'Soy santi', ''),
+(3, 24, 1, 'Que tal admin?', ''),
+(4, 7, 2, 'Buenas', '');
 
 -- --------------------------------------------------------
 
@@ -244,6 +261,26 @@ INSERT INTO `quejas` (`id`, `usuario_id`, `mensaje`) VALUES
 (2, 7, 'Es un gato siames'),
 (5, 7, 'NEecesito ayuda'),
 (6, 7, 'Santiago admiin ayudame');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reglas`
+--
+
+CREATE TABLE `reglas` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) DEFAULT NULL,
+  `contenido` varchar(670) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `reglas`
+--
+
+INSERT INTO `reglas` (`id`, `nombre`, `contenido`) VALUES
+(2, 'Respetar a los Usuarios', 'Debes respetar y convivir con todas las personas del chat'),
+(3, 'No enviar contenido inapropiado', 'Abstenerse de enviar contenido que incumpla con la proteccion al menor y la pornografia');
 
 -- --------------------------------------------------------
 
@@ -293,7 +330,7 @@ CREATE TABLE `resena` (
 
 INSERT INTO `resena` (`id`, `id_usuario`, `id_detalles`, `calificaciones`, `imagen`, `descripcion`, `titulo`) VALUES
 (5, 7, 8, 9, 'http://localhost:3000/images/1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'Una moto versatil economica y ligera, para principiantes y avanzados relacion precio-calidad', 'Skua 150'),
-(6, 7, 9, 12, 'http://localhost:3000/images/1694610698796-NAZ_9b63e097ba764683b356e75f121c6bcb.jpg', 'Vehiculo confiable y de años en el mercado, una excelente opcion.', 'Audi TT'),
+(6, 7, 9, 11, 'http://localhost:3000/images/1694610698796-NAZ_9b63e097ba764683b356e75f121c6bcb.jpg', 'Vehiculo confiable y de años en el mercado, una excelente opcion.', 'Audi TT'),
 (7, 7, 10, 8, 'http://localhost:3000/images/1694610813790-283239_ELS-3503_01.jpg', 'El auto mas elegido entre los argentinos que buscan un coche multifuncion', 'Bora T'),
 (8, 23, 11, 12, 'http://localhost:3000/images/1695044838158-xr.jpg', 'Moto practica y liviana, la mas recomendada y codiciada', 'XR'),
 (9, 23, 12, 11, 'http://localhost:3000/images/1695044944376-bmw-serie-3-2023-28-996x664.jpg', 'Un auto lujoso de gama alta, vehiculo de uso cotidiano y personal.', 'BMW Series 3');
@@ -320,7 +357,29 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
-(1, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 0, 0);
+(2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 1),
+(5, 'Diego', 'Mexicali', 'Diego@dev.gmail', 'usuario', '$2b$10$8BJJ.UIaqE.t282f/4Vth.YoBbey/xU1lmWLYnE0Qv6xgGpe4ILii', 2, 0),
+(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 0, 0),
+(8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 1),
+(9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 1, 0),
+(10, 'prueba', 'el valle', 'prueba@test.cc', 'usuario', '$2b$10$YVgq6LvtjCUITg.v10uWsuyde/w4AlTPxitE8OL2QikyjXF8RrOs.', 0, 0),
+(11, 'prueba2', 'chile', 'prueba2@foro.cc', 'usuario', '$2b$10$CY4wxOtXwi7qQ98eivBgsulyETY4.HhUTvuZuGlUbcyMbzPjZgvOG', 0, 0),
+(12, 'dev', 'benos aires', 'dev@test.cc', 'usuario', '$2b$10$.zPVMiZlauYBDhTSTspA5..oJ6iLjyLcNhCH81UgxT4qfr6noLQ9y', 0, 0),
+(13, 'san', 'cordoba', 'dev@factory.net', 'usuario', '$2b$10$AdwQXGlXXKPsDZlhZ14TWelFIJCiHyLYx9IICXAkqkuOjFJOdYoOK', 0, 0),
+(14, 'san@dev.cc', 'ciudad', 'san@dev.cc', 'usuario', '$2b$10$vypJog4U1z6utE1JNrLWv.9MPTW7vhfC6u1G7PRL/0pB1H/FJXYCy', 0, 0),
+(15, 'santiago@developer.cc', 'tandil', 'eldiablo77@gmail.com', 'usuario', '$2b$10$edOpCuZR7AbRa7bwyPxVUORB0usQC.SeXCMpzy7tbZcjLoJVhlk66', 1, 0),
+(16, 'santiaguito', 'copacabana', 'eldiablito@diabla.cc', 'usuario', '$2b$10$BOWJfUySdMZVctlU3BfRaOTP7fowEI0cGIM/AVhoi8An2ZjRGfeWq', 0, 0),
+(17, 'Santiago', 'Azul', 'Santiago@dev.cc', 'usuario', '$2b$10$Kwyb.H3oU/bdZccr.gA4T.7wdd5V6MG9XiTQZSO8xoXR1rI14DTay', 1, 0),
+(18, 'Gabriel', 'azul', 'gabo@dev.com', 'usuario', '$2b$10$Lle.As2Sz0W8FS6QaTK2heAK0UgsxAbHG6gsHKEf.4oU36qXgc8.q', 0, 0),
+(19, 'santiago', 'atacama', 'dev@diablo.cc', 'usuario', '$2b$10$OpheX0UhJCb/XQ0ujSnZQuh11NLAdesVfSaQoAclgTceqHmjyixnq', 0, 0),
+(20, 'copernico', 'santiago', 'coper@dev.cc', 'usuario', '$2b$10$L4zN0JX0raLyCBOPt0bMlu4wOy3K44M9SyhMq8dBEHXXHCyI5KhDe', 0, 0),
+(21, 'santo', 'dev', 'domingo@gmail.com', 'escritor', '$2b$10$RJuPs2FMM9KSKQhXpHYWzOIBvURU1bmt/bLaTMXHCLp7pBkPPA2DC', 0, 0),
+(22, 'santo', '2015', 'elpapi@gmail.com', 'escritor', '$2b$10$ReGLPIFwPOmPwP4EqPVCgOef3GFzb7DgfjDbqBSywQWgZc2StbXEO', 0, 0),
+(23, 'santo', 'atacama', 'desarrollador@dev.cc', 'escritor', '$2b$10$SvHRQELvx3ga3POVXZ/NRuTvmjjbDLDS/D3dijiSNbWHpVGItPwEe', 0, 0),
+(24, 'santo', 'azul', 'desarrollador@web.com', 'escritor', '$2b$10$3VWVsZZroFKf4UniFjr14epKmoY1zkdEDL95KKXGv8w9z5HdG2oK2', 0, 0),
+(25, 'santiago', 'azul', 'Sandev@gmail.com', 'usuario', '$2b$10$W/01sbhRP18IUNHsaHdN2eVUnIwQDNMHA4ZGjd3qTrtyGblDevccC', 0, 0),
+(26, 'Santiago', 'Azul', 'usuariosanti7a0@gmail.com', 'usuario', '$2b$10$3kZ7A76yv0UlqyPQKU5LWOEq51BK8uNFUdBBRawvYFAY6S0On9UVO', 0, 0),
+(27, 'Jorge', 'Tandil', 'jorge@gmail.com', 'usuario', '$2b$10$0KGfZTpbyK8p5FMq56ZjbOG34axXrpHtnN0O7hn/LaC/R4strv3XG', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -432,6 +491,12 @@ ALTER TABLE `quejas`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `reglas`
+--
+ALTER TABLE `reglas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `reportes`
 --
 ALTER TABLE `reportes`
@@ -469,7 +534,7 @@ ALTER TABLE `versus_votos`
 -- AUTO_INCREMENT de la tabla `articulos`
 --
 ALTER TABLE `articulos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `calificaciones`
@@ -487,13 +552,13 @@ ALTER TABLE `coches`
 -- AUTO_INCREMENT de la tabla `codigos`
 --
 ALTER TABLE `codigos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `comunicados`
 --
 ALTER TABLE `comunicados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles`
@@ -517,13 +582,19 @@ ALTER TABLE `listas`
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
 --
 ALTER TABLE `quejas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `reglas`
+--
+ALTER TABLE `reglas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `reportes`

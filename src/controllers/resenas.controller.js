@@ -1,4 +1,5 @@
 import * as resenasModel from '../models/resenas.model.js';
+import * as calificacionesModel from '../models/calificaciones.model.js';
 import * as config from "../libs/config.js";
 import debug from 'debug';
 import jwt from 'jsonwebtoken';
@@ -14,8 +15,9 @@ export const getResenas = async (req, res) => {
 
 export const getResenaById = async (req, res) => {
     const resena = await resenasModel.getResenaById(req.params.id);
+    const calificaciones = await calificacionesModel.getCalificacionByResena(req.params.id);
     printMessage("Se intento acceder a una reseña exitosamente");
-    if(resena.length > 0) return res.status(200).json(resena);
+    if(resena.length > 0) return res.status(200).json({resena: resena, calif: calificaciones});
     return res.status(400).json({"error": "No existe la reseña"});
 }
 

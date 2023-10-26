@@ -16,6 +16,13 @@ export const getCalificacionById = async (id) => {
     return result;
 }
 
+export const getCalificacionByResena = async (id) => {
+    const connection = await connectDatabase();
+    const [result] = await connection.query("SELECT * FROM calificaciones WHERE id_resena = ?", [id]);
+
+    return result;
+}
+
 export const createCalificacion = async (data) => {
     const connection = await connectDatabase();
     const [result] = await connection.query("SELECT * FROM calificaciones WHERE id_usuario = ? && id_resena = ?", [data.id_usuario, data.id_resena]);
