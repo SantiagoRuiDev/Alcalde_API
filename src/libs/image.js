@@ -59,3 +59,21 @@ export const uploadImage = (imageFieldName) => {
     });
   };
 };
+
+
+export const uploadLocalImage = (imageFieldName) => {
+  return (req, res, next) => {
+    upload.single(imageFieldName)(req, res, (err) => {
+      if (err) {
+        return next(err);
+      }
+
+      // Construir la URL de la imagen basada en la configuración de storage
+      const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+
+      return res.json({
+        location: imageUrl,
+      });
+    });
+  };
+};

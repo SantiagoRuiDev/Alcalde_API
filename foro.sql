@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-10-2023 a las 04:04:01
+-- Tiempo de generación: 09-11-2023 a las 03:28:26
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -77,6 +77,26 @@ INSERT INTO `calificaciones` (`id`, `id_usuario`, `id_resena`, `calificacion`) V
 (13, 24, 6, 2),
 (14, 24, 8, 5),
 (15, 24, 9, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `carrete`
+--
+
+CREATE TABLE `carrete` (
+  `id` int(11) NOT NULL,
+  `imagen` varchar(500) DEFAULT NULL,
+  `id_resena` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrete`
+--
+
+INSERT INTO `carrete` (`id`, `imagen`, `id_resena`) VALUES
+(1, 'http://localhost:3000/images/1699203144518-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 13),
+(2, 'http://localhost:3000/images/1699203144546-1694053257584-Suzuki-SEDAN-GL-Azul.png', 13);
 
 -- --------------------------------------------------------
 
@@ -174,7 +194,11 @@ INSERT INTO `detalles` (`id`, `modelo`, `marca`, `ano`, `hp`, `combustible`, `pu
 (9, 'TT', 'Audi', 2013, 350, 'Diesel', 2, 'Automatica', '3.4'),
 (10, 'Bora', 'Volkswagen', 2016, 270, 'Nafta', 4, 'Automatica', '1.8 T'),
 (11, 'XR 150 L', 'Honda', 2015, 150, 'Nafta', 0, '5 Velocidades', '	Monocilíndrico, 4 tiempos, 2 válvulas, OHC, refri'),
-(12, 'Series 3', 'BMW', 2022, 480, 'Diesel', 4, 'Automatica', '3.0 ');
+(12, 'Series 3', 'BMW', 2022, 480, 'Diesel', 4, 'Automatica', '3.0 '),
+(13, '2912', 'Nisa', 2023, 388, 'Diesel', 45, 'Auto', 'Matica'),
+(14, 'ASAS', 'ASASA', 0, 0, 'ASAS', 0, 'ASAS', 'ASASA'),
+(15, 'ASAAS', 'ASAAS', 0, 0, 'ASAAS', 0, 'ASAAS', 'ASAAS'),
+(16, 'ASAAS', 'ASAAS', 0, 0, 'ASAAS', 0, 'ASAAS', 'ASAAS');
 
 -- --------------------------------------------------------
 
@@ -321,19 +345,23 @@ CREATE TABLE `resena` (
   `calificaciones` int(11) DEFAULT 0,
   `imagen` varchar(1500) NOT NULL,
   `descripcion` varchar(1500) NOT NULL,
-  `titulo` varchar(50) NOT NULL
+  `titulo` varchar(50) NOT NULL,
+  `video` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `resena`
 --
 
-INSERT INTO `resena` (`id`, `id_usuario`, `id_detalles`, `calificaciones`, `imagen`, `descripcion`, `titulo`) VALUES
-(5, 7, 8, 9, 'http://localhost:3000/images/1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'Una moto versatil economica y ligera, para principiantes y avanzados relacion precio-calidad', 'Skua 150'),
-(6, 7, 9, 11, 'http://localhost:3000/images/1694610698796-NAZ_9b63e097ba764683b356e75f121c6bcb.jpg', 'Vehiculo confiable y de años en el mercado, una excelente opcion.', 'Audi TT'),
-(7, 7, 10, 8, 'http://localhost:3000/images/1694610813790-283239_ELS-3503_01.jpg', 'El auto mas elegido entre los argentinos que buscan un coche multifuncion', 'Bora T'),
-(8, 23, 11, 12, 'http://localhost:3000/images/1695044838158-xr.jpg', 'Moto practica y liviana, la mas recomendada y codiciada', 'XR'),
-(9, 23, 12, 11, 'http://localhost:3000/images/1695044944376-bmw-serie-3-2023-28-996x664.jpg', 'Un auto lujoso de gama alta, vehiculo de uso cotidiano y personal.', 'BMW Series 3');
+INSERT INTO `resena` (`id`, `id_usuario`, `id_detalles`, `calificaciones`, `imagen`, `descripcion`, `titulo`, `video`) VALUES
+(5, 7, 8, 9, 'http://localhost:3000/images/1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'Una moto versatil economica y ligera, para principiantes y avanzados relacion precio-calidad', 'Skua 150', NULL),
+(6, 7, 9, 11, 'http://localhost:3000/images/1694610698796-NAZ_9b63e097ba764683b356e75f121c6bcb.jpg', 'Vehiculo confiable y de años en el mercado, una excelente opcion.', 'Audi TT', NULL),
+(7, 7, 10, 8, 'http://localhost:3000/images/1694610813790-283239_ELS-3503_01.jpg', 'El auto mas elegido entre los argentinos que buscan un coche multifuncion', 'Bora T', NULL),
+(8, 23, 11, 12, 'http://localhost:3000/images/1695044838158-xr.jpg', 'Moto practica y liviana, la mas recomendada y codiciada', 'XR', NULL),
+(9, 23, 12, 11, 'http://localhost:3000/images/1695044944376-bmw-serie-3-2023-28-996x664.jpg', 'Un auto lujoso de gama alta, vehiculo de uso cotidiano y personal.', 'BMW Series 3', NULL),
+(11, 7, 14, 0, 'http://localhost:3000/images/1699202985934-1694642469699-istockphoto-1273534607-612x612.jpg', 'SASsAs', '2000', 'https://www.youtube.com/watch?v=_6XzJPyAJDI'),
+(12, 7, 15, 0, 'http://localhost:3000/images/1699203045996-1694642469699-istockphoto-1273534607-612x612.jpg', 'ASAAS', 'ASAAS', 'https://www.youtube.com/watch?v=_6XzJPyAJDI'),
+(13, 7, 16, 0, 'http://localhost:3000/images/1699203144483-1694642469699-istockphoto-1273534607-612x612.jpg', 'ASAAS', 'ASAAS', 'https://www.youtube.com/watch?v=_6XzJPyAJDI');
 
 -- --------------------------------------------------------
 
@@ -443,6 +471,12 @@ ALTER TABLE `calificaciones`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `carrete`
+--
+ALTER TABLE `carrete`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `coches`
 --
 ALTER TABLE `coches`
@@ -543,6 +577,12 @@ ALTER TABLE `calificaciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT de la tabla `carrete`
+--
+ALTER TABLE `carrete`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `coches`
 --
 ALTER TABLE `coches`
@@ -564,7 +604,7 @@ ALTER TABLE `comunicados`
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `foros`
@@ -582,7 +622,7 @@ ALTER TABLE `listas`
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
@@ -606,7 +646,7 @@ ALTER TABLE `reportes`
 -- AUTO_INCREMENT de la tabla `resena`
 --
 ALTER TABLE `resena`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

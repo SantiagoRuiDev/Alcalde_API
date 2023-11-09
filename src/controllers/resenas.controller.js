@@ -54,18 +54,31 @@ export const createResena = async (req, res) => {
         combustible: formDataObject.combustible,
         transmision: formDataObject.transmision,
         motor: formDataObject.motor,
+        video: formDataObject.video,
         imagen: req.imageUrl
     }
 
     try {
         const newResena = await resenasModel.createResena(data);
         printMessage("Se intento crear una reseña exitosamente");
-        if(newResena > 0) return res.status(201).json({"message": "Reseña creada exitosamente"});
+        if(newResena.affectedRows > 0) return res.status(201).json({"message": "Reseña creada exitosamente", id: newResena.insertId});
         return res.status(400).json({"error": "No se pudo crear la reseña"});
     } catch (error) {
         printMessage(error);
     }
 
+}
+
+export const addImageResena = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updated = await resenasModel.addImageResena(id, req.imageUrl);
+        
+        if(updated > 0) return res.status(200).json({"message": "Imagen agregada exitosamente"});
+        return res.status(400).json({"error": "No se pudo agregar la imagen"});
+    } catch (error) {
+        printMessage(error);
+    }
 }
 
 
