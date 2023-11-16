@@ -1,4 +1,6 @@
 import * as forosModel from '../models/foros.model.js';
+import * as strikesModel from '../models/strikes.model.js';
+import * as usuariosModel from '../models/usuarios.model.js';
 import debug from 'debug';
 
 const printMessage = debug('app:foros-controller');
@@ -49,6 +51,23 @@ export const createMensaje = async (req, res) => {
         }else {
             data = { id_usuario: req.id, id_foro: req.params.id, mensaje: req.body.mensaje, imagen: req.imageUrl };
         }
+
+        const getProhibidas = await forosModel.getPalabrasProhibidas();
+
+        const usuario = await usuariosModel.getUsuarioByID(req.id);
+        
+        if(usuario[0].rol === "usuario" || usuario[0].rol === "escritor"){
+            const foroEstado = await forosModel.getForoEstado(req.params.id);
+            if(foroEstado[0].estado === 0) return res.status(400).json({"message": "Foro silenciado"});
+
+            const splited = getProhibidas[0].contenido.split(', '); 
+            
+            if(splited.some((palabra) => data.mensaje.includes(palabra))) {
+                await strikesModel.strikeUsuario(req.id);
+                return res.status(400).json({"message": "Mensaje no permitido, se te añadio un strike"});
+            }
+        }
+
         const newMensaje = await forosModel.createMensaje(data);
     
         if(newMensaje > 0) return res.status(200).json({"message": "Mensaje creado correctamente"});
@@ -119,9 +138,50 @@ export const deleteRegla = async (req, res) => {
 
 export const getReglas = async (req, res) => {
     try {
-        console.log(1)
         const reglas = await forosModel.getReglas();
         return res.status(200).json(reglas)
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+
+export const agregarPalabra = async (req, res) => {
+    try {
+        const { palabras } = req.body; 
+
+        const palabrasProhibidas = await forosModel.getPalabrasProhibidas();
+
+        let palabrasAdded = palabrasProhibidas[0].contenido;
+
+        palabras.forEach(async (palabra) => {
+            if(!palabrasProhibidas[0].contenido.includes(palabra)) {
+                palabrasAdded += ", " + palabra;
+            }
+        });
+
+        const updatedPalabras = await forosModel.updatePalabrasProhibidas(palabrasAdded);
+
+        if(updatedPalabras > 0) return res.status(200).json({"message": "Palabras agregadas correctamente"});
+        return res.status(400).json({"message": "No se pudo agregar las palabras"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+ 
+export const silenciarForo = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const silenciarForo = await forosModel.silenciarForo(id);
+
+        if(silenciarForo) {
+            return res.status(200).json({"message": "La accion se realizo correctamente"});
+        }
+
+        return res.status(400).json({"error": "No se pudo realizar la accion"});
+        
     } catch (error) {
         printMessage(error);
     }

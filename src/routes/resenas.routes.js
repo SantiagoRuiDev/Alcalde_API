@@ -6,10 +6,10 @@ import { validarLogin, validarAdmin } from '../middlewares/usuarios.middlewares.
 
 const router = Router();
 
-router.get('/', validarLogin, getResenas);
-router.get('/:id', validarLogin, getResenaById);
-router.get('/info/:id', validarLogin, getResenaInfoById);
-router.get('/buscar/:search', validarLogin, searchResena);
+router.get('/', getResenas);
+router.get('/:id', getResenaById);
+router.get('/info/:id', getResenaInfoById);
+router.get('/buscar/:search', searchResena);
 router.post('/crear', validarLogin, uploadImage('image'), createResena);
 router.post('/add/image/:id', validarLogin, uploadImage('image'), addImageResena);
 router.post('/eliminar/:id', [validarLogin, validarAdmin], deleteResena);

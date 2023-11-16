@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2023 a las 03:28:26
+-- Tiempo de generación: 16-11-2023 a las 15:15:28
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -209,15 +209,16 @@ INSERT INTO `detalles` (`id`, `modelo`, `marca`, `ano`, `hp`, `combustible`, `pu
 CREATE TABLE `foros` (
   `id` int(11) NOT NULL,
   `titulo` varchar(50) NOT NULL,
-  `id_usuario` int(11) NOT NULL
+  `id_usuario` int(11) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `foros`
 --
 
-INSERT INTO `foros` (`id`, `titulo`, `id_usuario`) VALUES
-(2, 'Foro de Santiago', 7);
+INSERT INTO `foros` (`id`, `titulo`, `id_usuario`, `estado`) VALUES
+(2, 'Foro de Santiago', 7, 1);
 
 -- --------------------------------------------------------
 
@@ -304,7 +305,8 @@ CREATE TABLE `reglas` (
 
 INSERT INTO `reglas` (`id`, `nombre`, `contenido`) VALUES
 (2, 'Respetar a los Usuarios', 'Debes respetar y convivir con todas las personas del chat'),
-(3, 'No enviar contenido inapropiado', 'Abstenerse de enviar contenido que incumpla con la proteccion al menor y la pornografia');
+(3, 'No enviar contenido inapropiado', 'Abstenerse de enviar contenido que incumpla con la proteccion al menor y la pornografia'),
+(4, 'Palabras', 'Toxico, Idiota');
 
 -- --------------------------------------------------------
 
@@ -387,7 +389,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
 (2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 1),
 (5, 'Diego', 'Mexicali', 'Diego@dev.gmail', 'usuario', '$2b$10$8BJJ.UIaqE.t282f/4Vth.YoBbey/xU1lmWLYnE0Qv6xgGpe4ILii', 2, 0),
-(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 0, 0),
+(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 1),
 (8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 1),
 (9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 1, 0),
 (10, 'prueba', 'el valle', 'prueba@test.cc', 'usuario', '$2b$10$YVgq6LvtjCUITg.v10uWsuyde/w4AlTPxitE8OL2QikyjXF8RrOs.', 0, 0),
@@ -622,7 +624,7 @@ ALTER TABLE `listas`
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
@@ -634,7 +636,7 @@ ALTER TABLE `quejas`
 -- AUTO_INCREMENT de la tabla `reglas`
 --
 ALTER TABLE `reglas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `reportes`

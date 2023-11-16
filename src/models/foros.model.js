@@ -30,6 +30,13 @@ export const listarForo = async (id) => {
     return messages;
 }
 
+export const getForoEstado = async(id) => {
+    const connection = await connectDatabase();
+    const [estado] = await connection.query('SELECT estado FROM foros WHERE id = ?', [id]);
+
+    return estado;
+}
+
 export const createMensaje = async (data) => {
     const connection = await connectDatabase();
     const [newMessage] = await connection.query('INSERT INTO mensajes(id_usuario, id_foro, mensaje, imagen) VALUES (?, ?, ?, ?)', [data.id_usuario, data.id_foro, data.mensaje, data.imagen]);
@@ -65,4 +72,24 @@ export const getReglas = async () => {
     const connection = await connectDatabase();
     const [rows] = await connection.query('SELECT * FROM reglas');
     return rows;
+}
+
+export const getPalabrasProhibidas = async () => {
+    const connection = await connectDatabase();
+    const [rows] = await connection.query('SELECT contenido FROM reglas WHERE nombre = "Palabras"');
+    return rows;
+}
+
+export const updatePalabrasProhibidas = async (data) => {
+    const connection = await connectDatabase();
+    const [updated] = await connection.query('UPDATE reglas SET contenido = ? WHERE nombre = "Palabras"', [data]);
+    return updated.affectedRows;
+} 
+
+export const silenciarForo = async (id) => {
+    const connection = await connectDatabase();
+    const [isSilenced] = await connection.query('SELECT estado FROM foros WHERE id = ?', [id]);
+    let estado = (isSilenced[0].estado === 0) ? 1 : 0;
+    const [silenciado] = await connection.query('UPDATE foros SET estado = ? WHERE id = ?', [estado, id]);
+    return silenciado.affectedRows;
 }
