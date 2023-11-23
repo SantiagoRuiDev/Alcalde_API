@@ -93,3 +93,10 @@ export const silenciarForo = async (id) => {
     const [silenciado] = await connection.query('UPDATE foros SET estado = ? WHERE id = ?', [estado, id]);
     return silenciado.affectedRows;
 }
+
+export const buscarForo = async (param) => {
+    const connection = await connectDatabase();
+    const [searchResult] = await connection.query('SELECT f.id AS foro_id, u.id AS autor_id, u.nombre AS autor_nombre, f.titulo AS foro_titulo FROM foros AS f INNER JOIN usuarios AS u ON u.id = f.id_usuario WHERE f.titulo LIKE ?', ['%' + param + '%']);
+
+    return searchResult;
+}

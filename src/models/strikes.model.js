@@ -2,13 +2,18 @@ import { connectDatabase } from "../database/db.js";
 import debug from 'debug';
 const printMessage = debug('app:strikes-model');
 
+import * as notificacionesModel from './notificaciones.model.js';
+
 
 // Definimos modelos y acciones para los strikes.
 
 const banearMaxStrikes = async (id) => {
     try {
         const connection = await connectDatabase();
+        
         const [result] = await connection.execute('UPDATE usuarios SET ban = 1 WHERE id = ?', [id]);
+
+        return result.affectedRows;
     } catch(error){
         printMessage(error);
     }
@@ -23,9 +28,11 @@ export const strikeUsuario = async (id) => {
         if(info[0].strikes >= 3) {
             await banearMaxStrikes(id),
             printMessage(`El usuario ${id} fue baneado por tener 3 strikes`)
+            const notify = await notificacionesModel.createNotificacion(id, `Has sido baneado por tener 3 strikes`);
             return false;
         }; 
 
+        const notify = await notificacionesModel.createNotificacion(id, `Has recibido un strike`);
 
         const [result] = await connection.execute('UPDATE usuarios SET strikes = strikes + 1 WHERE id = ?', [id]);
         return result;

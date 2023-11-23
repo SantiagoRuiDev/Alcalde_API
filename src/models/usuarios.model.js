@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise';
 import { connectDatabase } from '../database/db.js';
+import * as notificacionesModel from './notificaciones.model.js';
 
 import { encryptPassword, comparePassword } from '../libs/password.js';
 
@@ -77,6 +78,8 @@ export const ascenderUsuario = async (id) => {
         return 0;
     }
 
+    const notify = await notificacionesModel.createNotificacion(id, `Has sido ascendido a ${newRol}`);
+
     const query = 'UPDATE usuarios SET rol = ? WHERE id = ?';
 
     const [result] = await connection.execute(query, [newRol, id]);
@@ -99,6 +102,9 @@ export const degradarUsuario = async (id) => {
     } else {
         return 0;
     }
+
+
+    const notify = await notificacionesModel.createNotificacion(id, `Has sido descendido a ${newRol}`);
 
     const query = 'UPDATE usuarios SET rol = ? WHERE id = ?';
 

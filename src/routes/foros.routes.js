@@ -1,6 +1,6 @@
 import Router from 'express';
 import { uploadImageChat } from '../libs/imageMessages.js';
-import { createForo, createMensaje, listarForo, listarForos, eliminarForo, deleteMensaje, createRegla, deleteRegla, getReglas, silenciarForo, agregarPalabra } from "../controllers/foros.controller.js";
+import { createForo, createMensaje, listarForo, listarForos, eliminarForo, deleteMensaje, createRegla, buscarForo, deleteRegla, getReglas, silenciarForo, agregarPalabra } from "../controllers/foros.controller.js";
 import { validarAdmin, validarLogin, validarModerador } from "../middlewares/usuarios.middlewares.js";
 
 const router = Router();
@@ -16,6 +16,7 @@ router.post('/silenciar/:id', validarLogin, validarModerador, silenciarForo);
 router.post('/regla/crear', validarLogin, validarAdmin, createRegla);
 router.post('/regla/eliminar/:id', validarLogin, validarAdmin, deleteRegla);
 router.post('/palabras', validarLogin, validarAdmin, agregarPalabra)
+router.get('/buscar/:cc', validarLogin, buscarForo)
 
 
 

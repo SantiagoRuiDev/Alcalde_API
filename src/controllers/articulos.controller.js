@@ -73,3 +73,16 @@ export const eliminarArticulo = async (req, res) => {
         printMessage(error);
     }
 }
+
+export const buscarArticulo = async (req, res) => {
+    try {
+        const { cc } = req.params;
+
+        const foundArticulo = await articulosModel.buscarArticulo(cc);
+
+        return res.status(200).json(foundArticulo);
+
+    } catch (error) {
+        printMessage(error)
+    }
+}

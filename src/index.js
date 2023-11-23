@@ -19,7 +19,12 @@ import { router as resenasRouter } from './routes/resenas.routes.js';
 import { router as calificacionesRouter } from './routes/calificaciones.routes.js';
 import { router as listasRouter } from './routes/listas.routes.js';
 import { router as forosRouter } from './routes/foros.routes.js';
+import { router as notificacionesRouter } from './routes/notificaciones.routes.js';
 
+
+
+import { createServer } from "http";
+import { Server } from "socket.io"; //replaces (import socketIo from 'socket.io')
 // Llamamos dependencias aqui arriba.
 
 // Declaramos y llamamos a funciones de las dependencias.
@@ -43,9 +48,34 @@ app.use('/api/listas', listasRouter);
 app.use('/api/versus', versusRouter);
 app.use('/api/foros', forosRouter);
 app.use('/api/comunicados', comunicadosRoutes);
+app.use('/api/notificaciones', notificacionesRouter);
 
 
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, { cors: { origin: "*" } });
+
+io.on("connection", (socket) => {
+
+    socket.on("joinForo", async (id) => {
+      const messages = await 
+      socket.emit("receiveMessages", messages);
+    })
+  
+    socket.on("sendMessage", async (data) => {
+      const send = await sendMessage(data.token, data.message, data.room);
+      const messages = await joinRoom(data.room);
+      console.log("MensajeRecibido")
+      io.emit("receiveMessages", messages);
+      console.log("Emitido")
+    })
+  
+    socket.on("disconnect", () => {
+      console.log("Disconnected");
+    });
+  });
 // Listamos el servidor. En el puerto 3000 de nuestro http://localhost:{puerto}
-app.listen(config.puerto, () => {
-    printMessage("El servidor fue levantado correctamennte");
-})
+
+httpServer.listen(config.puerto, () => {
+    printMessage(`Server running on port ${config.puerto}`);
+  });

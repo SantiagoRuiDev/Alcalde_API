@@ -15,6 +15,13 @@ export const verArticulo = async (id) => {
     return result;
 }
 
+export const buscarArticulo = async (cc) => {
+    const connection = await connectDatabase();
+    const [result] = await connection.query("SELECT * FROM articulos WHERE titulo LIKE ?" ,[`%${cc}%`]);
+
+    return result;
+}
+
 
 export const crearArticulo = async (data) => {
     const connection = await connectDatabase();

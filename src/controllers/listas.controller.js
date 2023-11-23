@@ -65,3 +65,16 @@ export const deleteListaById = async (req, res) => {
         printMessage(error);
     }
 }
+
+export const buscarListas = async (req, res) => {
+    try {
+        
+        const {cc} = req.params;
+        const listas = await listasModel.buscarListas(cc);
+        printMessage('Se accedio a las listas correctamente')
+        return res.status(200).json(listas);
+
+    } catch (error) {
+        printMessage(error)
+    }
+}

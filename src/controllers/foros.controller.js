@@ -186,3 +186,16 @@ export const silenciarForo = async (req, res) => {
         printMessage(error);
     }
 }
+
+export const buscarForo = async (req, res) => {
+    try {
+        const { cc } = req.params;
+
+        const foros = await forosModel.buscarForo(cc);
+
+        return res.status(200).json(foros);
+        
+    } catch (error) {
+        
+    }
+}

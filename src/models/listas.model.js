@@ -34,3 +34,12 @@ export const createLista = async (data) => {
 
     return newLista.affectedRows;
 }
+
+
+export const buscarListas = async (cc) => {
+    const connection = await connectDatabase();
+    const [result] = await connection.query("SELECT * FROM listas WHERE titulo LIKE ?", [`%${cc}%`]);
+
+    return result;
+
+}   

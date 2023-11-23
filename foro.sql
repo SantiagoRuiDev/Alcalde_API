@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-11-2023 a las 15:15:28
+-- Tiempo de generación: 23-11-2023 a las 13:38:28
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -42,7 +42,8 @@ CREATE TABLE `articulos` (
 --
 
 INSERT INTO `articulos` (`id`, `id_usuario`, `titulo`, `subtitulo`, `contenido`, `fecha`, `portada`) VALUES
-(12, 23, 'Escrito desde cuenta de escritor', 'Wazaaaa', '<p>Megatrueno</p>', '2023-10-24', 'http://localhost:3000/images/1698156662366-marco.png');
+(12, 23, 'Escrito desde cuenta de escritor', 'Wazaaaa', '<p>Megatrueno</p>', '2023-10-24', 'http://localhost:3000/images/1698156662366-marco.png'),
+(13, 7, 'Poseidon y sus andadas', 'Poseidon y sus andadas', '<p>Poseidon y sus andadas</p>', '2023-11-23', 'http://localhost:3000/images/1700740007389-marco.png');
 
 -- --------------------------------------------------------
 
@@ -218,7 +219,8 @@ CREATE TABLE `foros` (
 --
 
 INSERT INTO `foros` (`id`, `titulo`, `id_usuario`, `estado`) VALUES
-(2, 'Foro de Santiago', 7, 1);
+(2, 'Foro de Santiago', 7, 1),
+(3, 'Carros Flama', 7, 1);
 
 -- --------------------------------------------------------
 
@@ -251,7 +253,7 @@ CREATE TABLE `mensajes` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_foro` int(11) NOT NULL,
-  `mensaje` varchar(1500) NOT NULL,
+  `mensaje` varchar(1500) DEFAULT '',
   `imagen` varchar(130) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -264,6 +266,19 @@ INSERT INTO `mensajes` (`id`, `id_usuario`, `id_foro`, `mensaje`, `imagen`) VALU
 (2, 7, 1, 'Soy santi', ''),
 (3, 24, 1, 'Que tal admin?', ''),
 (4, 7, 2, 'Buenas', '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notificaciones`
+--
+
+CREATE TABLE `notificaciones` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `mensaje` text NOT NULL,
+  `fecha` date NOT NULL DEFAULT curdate()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -389,7 +404,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
 (2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 1),
 (5, 'Diego', 'Mexicali', 'Diego@dev.gmail', 'usuario', '$2b$10$8BJJ.UIaqE.t282f/4Vth.YoBbey/xU1lmWLYnE0Qv6xgGpe4ILii', 2, 0),
-(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 1),
+(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 0),
 (8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 1),
 (9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 1, 0),
 (10, 'prueba', 'el valle', 'prueba@test.cc', 'usuario', '$2b$10$YVgq6LvtjCUITg.v10uWsuyde/w4AlTPxitE8OL2QikyjXF8RrOs.', 0, 0),
@@ -406,7 +421,7 @@ INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`
 (21, 'santo', 'dev', 'domingo@gmail.com', 'escritor', '$2b$10$RJuPs2FMM9KSKQhXpHYWzOIBvURU1bmt/bLaTMXHCLp7pBkPPA2DC', 0, 0),
 (22, 'santo', '2015', 'elpapi@gmail.com', 'escritor', '$2b$10$ReGLPIFwPOmPwP4EqPVCgOef3GFzb7DgfjDbqBSywQWgZc2StbXEO', 0, 0),
 (23, 'santo', 'atacama', 'desarrollador@dev.cc', 'escritor', '$2b$10$SvHRQELvx3ga3POVXZ/NRuTvmjjbDLDS/D3dijiSNbWHpVGItPwEe', 0, 0),
-(24, 'santo', 'azul', 'desarrollador@web.com', 'escritor', '$2b$10$3VWVsZZroFKf4UniFjr14epKmoY1zkdEDL95KKXGv8w9z5HdG2oK2', 0, 0),
+(24, 'santo', 'azul', 'desarrollador@web.com', 'escritor', '$2b$10$3VWVsZZroFKf4UniFjr14epKmoY1zkdEDL95KKXGv8w9z5HdG2oK2', 1, 0),
 (25, 'santiago', 'azul', 'Sandev@gmail.com', 'usuario', '$2b$10$W/01sbhRP18IUNHsaHdN2eVUnIwQDNMHA4ZGjd3qTrtyGblDevccC', 0, 0),
 (26, 'Santiago', 'Azul', 'usuariosanti7a0@gmail.com', 'usuario', '$2b$10$3kZ7A76yv0UlqyPQKU5LWOEq51BK8uNFUdBBRawvYFAY6S0On9UVO', 0, 0),
 (27, 'Jorge', 'Tandil', 'jorge@gmail.com', 'usuario', '$2b$10$0KGfZTpbyK8p5FMq56ZjbOG34axXrpHtnN0O7hn/LaC/R4strv3XG', 0, 0);
@@ -521,6 +536,12 @@ ALTER TABLE `mensajes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `quejas`
 --
 ALTER TABLE `quejas`
@@ -570,7 +591,7 @@ ALTER TABLE `versus_votos`
 -- AUTO_INCREMENT de la tabla `articulos`
 --
 ALTER TABLE `articulos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `calificaciones`
@@ -612,7 +633,7 @@ ALTER TABLE `detalles`
 -- AUTO_INCREMENT de la tabla `foros`
 --
 ALTER TABLE `foros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `listas`
@@ -624,7 +645,13 @@ ALTER TABLE `listas`
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
