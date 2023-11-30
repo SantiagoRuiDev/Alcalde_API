@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-11-2023 a las 13:38:28
+-- Tiempo de generación: 30-11-2023 a las 15:29:42
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -265,7 +265,46 @@ INSERT INTO `mensajes` (`id`, `id_usuario`, `id_foro`, `mensaje`, `imagen`) VALU
 (1, 7, 1, 'Buenas chat', ''),
 (2, 7, 1, 'Soy santi', ''),
 (3, 24, 1, 'Que tal admin?', ''),
-(4, 7, 2, 'Buenas', '');
+(57, 7, 2, 'H>ola gente', ''),
+(58, 7, 2, 'Como estan', '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mensajes_likes`
+--
+
+CREATE TABLE `mensajes_likes` (
+  `id` int(11) NOT NULL,
+  `id_foro` int(11) NOT NULL,
+  `id_mensaje` int(11) NOT NULL,
+  `point` int(11) DEFAULT 1,
+  `id_votante` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mensajes_replica`
+--
+
+CREATE TABLE `mensajes_replica` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `id_foro` int(11) NOT NULL,
+  `id_mensaje` int(11) NOT NULL,
+  `mensaje` text DEFAULT NULL,
+  `imagen` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `mensajes_replica`
+--
+
+INSERT INTO `mensajes_replica` (`id`, `id_usuario`, `id_foro`, `id_mensaje`, `mensaje`, `imagen`) VALUES
+(2, 7, 2, 57, 'hey vrad', ''),
+(3, 7, 2, 58, 'ahi vamos brad, sobreviviendo', ''),
+(4, 7, 2, 58, '', 'http://localhost:3000/images/foros/1701347954506-notification_1827370.png');
 
 -- --------------------------------------------------------
 
@@ -279,6 +318,19 @@ CREATE TABLE `notificaciones` (
   `mensaje` text NOT NULL,
   `fecha` date NOT NULL DEFAULT curdate()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notificaciones`
+--
+
+INSERT INTO `notificaciones` (`id`, `id_usuario`, `mensaje`, `fecha`) VALUES
+(4, 7, 'Has sido baneado por tener 3 strikes', '2023-11-30'),
+(5, 7, 'Has sido baneado por tener 3 strikes', '2023-11-30'),
+(6, 7, 'Has recibido un strike', '2023-11-30'),
+(7, 2, 'Has sido ascendido a moderador', '2023-11-30'),
+(8, 2, 'Has sido descendido a escritor', '2023-11-30'),
+(9, 9, 'Has recibido un strike', '2023-11-30'),
+(10, 7, 'Has recibido un strike', '2023-11-30');
 
 -- --------------------------------------------------------
 
@@ -301,6 +353,36 @@ INSERT INTO `quejas` (`id`, `usuario_id`, `mensaje`) VALUES
 (2, 7, 'Es un gato siames'),
 (5, 7, 'NEecesito ayuda'),
 (6, 7, 'Santiago admiin ayudame');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `registro`
+--
+
+CREATE TABLE `registro` (
+  `id` int(11) NOT NULL,
+  `tipo_sancion` varchar(150) NOT NULL,
+  `id_sancionado` int(11) NOT NULL,
+  `razon` varchar(250) NOT NULL,
+  `id_moderador` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `registro`
+--
+
+INSERT INTO `registro` (`id`, `tipo_sancion`, `id_sancionado`, `razon`, `id_moderador`) VALUES
+(1, 'ASCENSO', 2, 'Se ascendio un usuario de id 2', 7),
+(2, 'DESCENSO', 2, 'Se descendio un usuario de id 2', 7),
+(3, 'BAN', 2, 'Se baneo al usuario de id 2', 7),
+(4, 'BAN', 2, 'Se baneo al usuario de id 2', 7),
+(5, 'PERDON', 2, 'Se ha perdonado a un usuario de id 2', 7),
+(6, 'STRIKE', 9, 'Porque quiero', 7),
+(7, 'STRIKE', 7, 'Porque puedo', 7),
+(8, 'BAN', 7, 'Porq si', 7),
+(9, 'PERDON', 8, 'me arrepenti', 7),
+(10, 'BAN', 2, 'banned papu', 7);
 
 -- --------------------------------------------------------
 
@@ -335,19 +417,16 @@ CREATE TABLE `reportes` (
   `id_foro` int(11) DEFAULT NULL,
   `id_articulo` int(11) DEFAULT NULL,
   `id_resena` int(11) DEFAULT NULL,
-  `id_reportante` int(11) NOT NULL
+  `id_reportante` int(11) NOT NULL,
+  `motivo` varchar(350) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `reportes`
 --
 
-INSERT INTO `reportes` (`id`, `id_usuario`, `id_foro`, `id_articulo`, `id_resena`, `id_reportante`) VALUES
-(2, 5, 3, 0, 0, 1),
-(3, 7, 0, 3, 0, 7),
-(4, 7, 0, 3, 0, 7),
-(6, 7, 0, 3, 0, 7),
-(7, 7, 1, 0, 0, 24);
+INSERT INTO `reportes` (`id`, `id_usuario`, `id_foro`, `id_articulo`, `id_resena`, `id_reportante`, `motivo`) VALUES
+(8, 7, 3, 0, 0, 7, 'Porque tiene contenido indebido');
 
 -- --------------------------------------------------------
 
@@ -404,9 +483,9 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
 (2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 1),
 (5, 'Diego', 'Mexicali', 'Diego@dev.gmail', 'usuario', '$2b$10$8BJJ.UIaqE.t282f/4Vth.YoBbey/xU1lmWLYnE0Qv6xgGpe4ILii', 2, 0),
-(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 0),
-(8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 1),
-(9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 1, 0),
+(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 2, 1),
+(8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 0),
+(9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 2, 0),
 (10, 'prueba', 'el valle', 'prueba@test.cc', 'usuario', '$2b$10$YVgq6LvtjCUITg.v10uWsuyde/w4AlTPxitE8OL2QikyjXF8RrOs.', 0, 0),
 (11, 'prueba2', 'chile', 'prueba2@foro.cc', 'usuario', '$2b$10$CY4wxOtXwi7qQ98eivBgsulyETY4.HhUTvuZuGlUbcyMbzPjZgvOG', 0, 0),
 (12, 'dev', 'benos aires', 'dev@test.cc', 'usuario', '$2b$10$.zPVMiZlauYBDhTSTspA5..oJ6iLjyLcNhCH81UgxT4qfr6noLQ9y', 0, 0),
@@ -536,6 +615,18 @@ ALTER TABLE `mensajes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `mensajes_likes`
+--
+ALTER TABLE `mensajes_likes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `mensajes_replica`
+--
+ALTER TABLE `mensajes_replica`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
@@ -545,6 +636,12 @@ ALTER TABLE `notificaciones`
 -- Indices de la tabla `quejas`
 --
 ALTER TABLE `quejas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `registro`
+--
+ALTER TABLE `registro`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -645,19 +742,37 @@ ALTER TABLE `listas`
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+
+--
+-- AUTO_INCREMENT de la tabla `mensajes_likes`
+--
+ALTER TABLE `mensajes_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `mensajes_replica`
+--
+ALTER TABLE `mensajes_replica`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
 --
 ALTER TABLE `quejas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `registro`
+--
+ALTER TABLE `registro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `reglas`
@@ -669,7 +784,7 @@ ALTER TABLE `reglas`
 -- AUTO_INCREMENT de la tabla `reportes`
 --
 ALTER TABLE `reportes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `resena`

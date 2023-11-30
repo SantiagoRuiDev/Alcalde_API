@@ -41,6 +41,22 @@ export const listarForo = async (req, res) => {
     }
 }
 
+export const createLike = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const data = { id_votante: req.id, id_mensaje: req.body.id_mensaje, id_foro: id };
+
+        const like = await forosModel.createLike(data);
+
+        if(like > 0) return res.status(200).json({"message": "Diste like o quitaste el like correctamente"});
+
+        return res.status(400).json({"message": "No se pudo crear el like"});
+
+    } catch (error) {
+        printMessage(error);
+    }
+}
 
 export const createMensaje = async (req, res) => {
     try {
@@ -78,11 +94,60 @@ export const createMensaje = async (req, res) => {
     }
 }
 
+export const createReply = async (req, res) => {
+    try {
+        let data;
+        if(Array.isArray(req.body.mensaje)) {
+            req.body.mensaje.reverse();
+            data = { id_usuario: req.id, id_mensaje: req.body.id_mensaje, id_foro: req.params.id, mensaje: req.body.mensaje[0], imagen: req.imageUrl };
+        }else { 
+            data = { id_usuario: req.id, id_mensaje: req.body.id_mensaje, id_foro: req.params.id, mensaje: req.body.mensaje, imagen: req.imageUrl };
+        }
+
+        const getProhibidas = await forosModel.getPalabrasProhibidas();
+
+        const usuario = await usuariosModel.getUsuarioByID(req.id);
+        
+        if(usuario[0].rol === "usuario" || usuario[0].rol === "escritor"){
+            const foroEstado = await forosModel.getForoEstado(req.params.id);
+            if(foroEstado[0].estado === 0) return res.status(400).json({"message": "Foro silenciado"});
+
+            const splited = getProhibidas[0].contenido.split(', '); 
+            
+            if(splited.some((palabra) => data.mensaje.includes(palabra))) {
+                await strikesModel.strikeUsuario(req.id);
+                return res.status(400).json({"message": "Mensaje no permitido, se te añadio un strike"});
+            }
+        }
+
+        const newMensaje = await forosModel.createReply(data);
+    
+        if(newMensaje > 0) return res.status(200).json({"message": "Mensaje creado correctamente"});
+
+        return res.status(400).json({"message": "No se pudo crear el mensaje"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
 
 export const deleteMensaje = async (req, res) => {
     try {
         const data = { id: req.params.id };
         const deleted = await forosModel.deleteMensaje(data);
+    
+        if(deleted > 0) return res.status(200).json({"message": "Mensaje eliminado correctamente"});
+
+        return res.status(400).json({"message": "No se pudo crear el mensaje"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
+export const deleteReply = async (req, res) => {
+    try {
+        const data = { id: req.params.id };
+        const deleted = await forosModel.deleteReply(data);
     
         if(deleted > 0) return res.status(200).json({"message": "Mensaje eliminado correctamente"});
 

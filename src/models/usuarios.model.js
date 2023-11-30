@@ -4,6 +4,10 @@ import * as notificacionesModel from './notificaciones.model.js';
 
 import { encryptPassword, comparePassword } from '../libs/password.js';
 
+
+import * as registroModel from './registro.model.js';
+
+
 // Aqui crearemos los modelos para contactar la database.
 
 export const getUsuarios = async () => {
@@ -37,17 +41,21 @@ export const loginUsuario = async (usuario) => {
     return [{id: undefined}]; // Si no, retorna un id indenifido.
 }
 
-export const banUsuario = async (id) => {
+export const banUsuario = async (id, moderador, razon) => {
     const connection = await connectDatabase();
     const query = 'UPDATE usuarios SET ban = 1 WHERE id = ?';
+
+    const registro = await registroModel.addRegistro('BAN', razon, id, moderador);
 
     const [result] = await connection.execute(query, [id]);
     return result.changedRows;
 }
 
-export const pardonUsuario = async (id) => {
+export const pardonUsuario = async (id, moderador, razon) => {
     const connection = await connectDatabase();
     const query = 'UPDATE usuarios SET ban = 0 WHERE id = ?';
+    
+    const registro = await registroModel.addRegistro('PERDON', razon, id, moderador);
 
     const [result] = await connection.execute(query, [id]);
     return result.changedRows;
@@ -62,7 +70,7 @@ export const deleteUsuario = async (id) => {
 }
 
 
-export const ascenderUsuario = async (id) => {
+export const ascenderUsuario = async (id, moderador) => {
     const connection = await connectDatabase();
 
     const [userRol] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [id]);
@@ -77,6 +85,8 @@ export const ascenderUsuario = async (id) => {
     } else {
         return 0;
     }
+    
+    const registro = await registroModel.addRegistro("ASCENSO", "Se ascendio un usuario de id " + id, id, moderador);
 
     const notify = await notificacionesModel.createNotificacion(id, `Has sido ascendido a ${newRol}`);
 
@@ -87,7 +97,7 @@ export const ascenderUsuario = async (id) => {
 }
 
 
-export const degradarUsuario = async (id) => {
+export const degradarUsuario = async (id, moderador) => {
     const connection = await connectDatabase();
 
     const [userRol] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [id]);
@@ -103,6 +113,7 @@ export const degradarUsuario = async (id) => {
         return 0;
     }
 
+    const registro = await registroModel.addRegistro("DESCENSO", "Se descendio un usuario de id " + id, id, moderador);
 
     const notify = await notificacionesModel.createNotificacion(id, `Has sido descendido a ${newRol}`);
 

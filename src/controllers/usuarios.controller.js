@@ -134,7 +134,8 @@ export const compareChangePass = async (req, res) => {
 export const banUsuario = async (req, res) => {
     try {
         const { id } = req.params; // Conseguimos la id desde los parametros.
-        const result = await usuarioModel.banUsuario(id); // Llamamos al modelo que banea.
+        const { razon } = req.body;
+        const result = await usuarioModel.banUsuario(id, req.id, razon); // Llamamos al modelo que banea.
     
         if(result > 0) return res.status(200).json({success: 'Usuario baneado correctamente'});
     
@@ -149,7 +150,8 @@ export const banUsuario = async (req, res) => {
 export const pardonUsuario = async (req, res) => {
     try {
         const { id } = req.params; // Destructuramos el id, a travez de los parametros en la url.
-        const result = await usuarioModel.pardonUsuario(id);
+        const { razon } = req.body;
+        const result = await usuarioModel.pardonUsuario(id, req.id, razon);
     
         if(result > 0) return res.status(200).json({success: 'Usuario perdonado correctamente'}); // Si encuentra lineas afectadas, retorna success.
     
@@ -176,7 +178,7 @@ export const deleteUsuario = async (req, res) => {
 export const ascenderUsuario = async(req, res) => {
     try{
         const { id } = req.params;
-        const result = await usuarioModel.ascenderUsuario(id);
+        const result = await usuarioModel.ascenderUsuario(id, req.id);
 
         if(result > 0) return res.status(200).json({success: 'Usuario ascendido correctamente'});
 
@@ -189,7 +191,7 @@ export const ascenderUsuario = async(req, res) => {
 export const degradarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await usuarioModel.degradarUsuario(id);
+        const result = await usuarioModel.degradarUsuario(id, req.id);
 
         if(result > 0) return res.status(200).json({success: 'Usuario degradado correctamente'});
 

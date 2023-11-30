@@ -21,13 +21,22 @@ export const deleteMensaje = async (data) => {
 
     return deleted.affectedRows;
 }
+export const deleteReply = async (data) => {
+    const connection = await connectDatabase();
+    const [deleted] = await connection.query('DELETE FROM mensajes_replica WHERE id = ?', [data.id]);
+
+    return deleted.affectedRows;
+}
+
 
 
 export const listarForo = async (id) => {
     const connection = await connectDatabase();
     const [messages] = await connection.query('SELECT m.id,u.nombre,m.mensaje,m.id_usuario,m.imagen FROM mensajes AS m INNER JOIN usuarios AS u ON u.id = m.id_usuario  WHERE id_foro = ?', [id]);
+    const [replys] = await connection.query('SELECT mr.id, u.nombre, mr.mensaje, mr.id_usuario, mr.imagen, mr.id_mensaje FROM mensajes_replica AS mr INNER JOIN usuarios AS u ON u.id = mr.id_usuario WHERE id_foro = ?', [id]);
+    const [likes] = await connection.query('SELECT * FROM mensajes_likes WHERE id_foro = ?', [id]);
 
-    return messages;
+    return [messages, replys, likes];
 }
 
 export const getForoEstado = async(id) => {
@@ -37,6 +46,22 @@ export const getForoEstado = async(id) => {
     return estado;
 }
 
+export const createLike = async (data) => {
+    const connection = await connectDatabase();
+
+    const [userHasLiked] = await connection.query('SELECT * FROM mensajes_likes WHERE id_votante = ? AND id_mensaje = ? AND id_foro = ?', [data.id_votante, data.id_mensaje, data.id_foro]);
+
+    if(userHasLiked.length > 0) {
+        // Delete message
+        const [deleted] = await connection.query('DELETE FROM mensajes_likes WHERE id_votante = ? AND id_mensaje = ? AND id_foro = ?', [data.id_votante, data.id_mensaje, data.id_foro]);
+        return deleted.affectedRows;
+    }
+
+    const [insertLike] = await connection.query('INSERT INTO mensajes_likes(id_votante, id_mensaje, id_foro) VALUES (?, ?, ?)', [data.id_votante, data.id_mensaje, data.id_foro]);
+
+    return insertLike.affectedRows;
+}
+
 export const createMensaje = async (data) => {
     const connection = await connectDatabase();
     const [newMessage] = await connection.query('INSERT INTO mensajes(id_usuario, id_foro, mensaje, imagen) VALUES (?, ?, ?, ?)', [data.id_usuario, data.id_foro, data.mensaje, data.imagen]);
@@ -44,6 +69,13 @@ export const createMensaje = async (data) => {
     return newMessage.affectedRows;
 }
 
+
+export const createReply = async (data) => {
+    const connection = await connectDatabase();
+    const [newMessage] = await connection.query('INSERT INTO mensajes_replica(id_usuario, id_mensaje, id_foro, mensaje, imagen) VALUES (?, ?, ?, ?, ?)', [data.id_usuario, data.id_mensaje, data.id_foro, data.mensaje, data.imagen]);
+
+    return newMessage.affectedRows;
+}
 
 export const eliminarForo = async (id) => {
     const connection = await connectDatabase();

@@ -22,8 +22,8 @@ export const createReporte = async (req, res) => {
         const decoded = jwt.verify(token, config.secret);
         const reportante = decoded.id;
 
-        const {id_usuario, id_foro, id_articulo, id_resena} = req.body;
-        const data = {id_usuario: id_usuario, id_foro: id_foro, id_articulo: id_articulo, id_resena: id_resena, id_reportante: reportante};
+        const {id_usuario, id_foro, id_articulo, id_resena, motivo} = req.body;
+        const data = {id_usuario: id_usuario, id_foro: id_foro, id_articulo: id_articulo, id_resena: id_resena, id_reportante: reportante, motivo: motivo};
         const reporte = await reportesModel.createReporte(data);
         
         if(reporte.affectedRows === 0) return res.json({error: "No se pudo ingresar un nuevo reporte"});
@@ -39,12 +39,10 @@ export const createReporte = async (req, res) => {
 
 export const deleteReporte = async (req, res) => {
     try {
-        const {id} = req.params;
-        const reporteEliminado = await reportesModel.deleteReporte(id);
+        const reporteEliminado = await reportesModel.deleteReporte(req.params.id, req.id);
 
         if(reporteEliminado === 0) return res.json({error: "No se pudo eliminar el reporte"});
 
-        printMessage(`Se elimino el reporte: ${id}`);
         return res.json({message: "Se elimino el reporte"});
     } catch(error) {
         printMessage(error);
