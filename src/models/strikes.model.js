@@ -37,7 +37,7 @@ export const strikeUsuario = async (id, moderador, razon) => {
 
         const registro = await registroModel.addRegistro('STRIKE', razon, id, moderador);
 
-        const notify = await notificacionesModel.createNotificacion(id, `Has recibido un strike`);
+        const notify = await notificacionesModel.createNotificacion(id, razon);
 
         const [result] = await connection.execute('UPDATE usuarios SET strikes = strikes + 1 WHERE id = ?', [id]);
         return result;

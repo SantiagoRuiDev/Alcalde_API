@@ -21,6 +21,7 @@ import { router as listasRouter } from './routes/listas.routes.js';
 import { router as forosRouter } from './routes/foros.routes.js';
 import { router as notificacionesRouter } from './routes/notificaciones.routes.js';
 import { router as registrosRouter } from './routes/registros.routes.js';
+import { router as subforoRouter } from './routes/subforo.routes.js';
 
 
 
@@ -51,6 +52,7 @@ app.use('/api/foros', forosRouter);
 app.use('/api/comunicados', comunicadosRoutes);
 app.use('/api/notificaciones', notificacionesRouter);
 app.use('/api/registros', registrosRouter);
+app.use('/api/subforo', subforoRouter);
 
 
 

@@ -1,5 +1,6 @@
 import * as resenasModel from '../models/resenas.model.js';
 import * as calificacionesModel from '../models/calificaciones.model.js';
+import * as subforoModel from '../models/subforo.model.js';
 import * as config from "../libs/config.js";
 import debug from 'debug';
 import jwt from 'jsonwebtoken';
@@ -61,7 +62,14 @@ export const createResena = async (req, res) => {
     try {
         const newResena = await resenasModel.createResena(data);
         printMessage("Se intento crear una reseña exitosamente");
-        if(newResena.affectedRows > 0) return res.status(201).json({"message": "Reseña creada exitosamente", id: newResena.insertId});
+        if(newResena.affectedRows > 0) {
+
+            const newSubforoFallos = await subforoModel.createSubforo({resena: newResena.insertId, tipo: 0});
+            const newSubforoDudas = await subforoModel.createSubforo({resena: newResena.insertId, tipo: 1});
+            const newSubforoImagenes = await subforoModel.createSubforo({resena: newResena.insertId, tipo: 2});
+            
+            return res.status(201).json({"message": "Reseña creada exitosamente", id: newResena.insertId})
+        };
         return res.status(400).json({"error": "No se pudo crear la reseña"});
     } catch (error) {
         printMessage(error);

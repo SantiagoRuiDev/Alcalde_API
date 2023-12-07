@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-11-2023 a las 15:29:42
+-- Tiempo de generación: 07-12-2023 a las 16:05:50
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -97,7 +97,8 @@ CREATE TABLE `carrete` (
 
 INSERT INTO `carrete` (`id`, `imagen`, `id_resena`) VALUES
 (1, 'http://localhost:3000/images/1699203144518-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 13),
-(2, 'http://localhost:3000/images/1699203144546-1694053257584-Suzuki-SEDAN-GL-Azul.png', 13);
+(2, 'http://localhost:3000/images/1699203144546-1694053257584-Suzuki-SEDAN-GL-Azul.png', 13),
+(3, 'http://localhost:3000/images/1701950089546-1695304760532-1695052232856-istockphoto-1273534607-612x612.jpg', 16);
 
 -- --------------------------------------------------------
 
@@ -199,7 +200,10 @@ INSERT INTO `detalles` (`id`, `modelo`, `marca`, `ano`, `hp`, `combustible`, `pu
 (13, '2912', 'Nisa', 2023, 388, 'Diesel', 45, 'Auto', 'Matica'),
 (14, 'ASAS', 'ASASA', 0, 0, 'ASAS', 0, 'ASAS', 'ASASA'),
 (15, 'ASAAS', 'ASAAS', 0, 0, 'ASAAS', 0, 'ASAAS', 'ASAAS'),
-(16, 'ASAAS', 'ASAAS', 0, 0, 'ASAAS', 0, 'ASAAS', 'ASAAS');
+(16, 'ASAAS', 'ASAAS', 0, 0, 'ASAAS', 0, 'ASAAS', 'ASAAS'),
+(17, 'ASASAS', 'ASASAS', 0, 0, 'ASASAS', 0, 'ASASAS', 'ASASAS'),
+(18, 'ASASAS', 'ASASAS', 0, 0, 'ASASAS', 0, 'ASASAS', 'ASASAS'),
+(19, 'ASASAS', 'ASASAS', 0, 0, 'ASASAS', 0, 'ASASAS', 'ASASAS');
 
 -- --------------------------------------------------------
 
@@ -324,13 +328,9 @@ CREATE TABLE `notificaciones` (
 --
 
 INSERT INTO `notificaciones` (`id`, `id_usuario`, `mensaje`, `fecha`) VALUES
-(4, 7, 'Has sido baneado por tener 3 strikes', '2023-11-30'),
-(5, 7, 'Has sido baneado por tener 3 strikes', '2023-11-30'),
-(6, 7, 'Has recibido un strike', '2023-11-30'),
 (7, 2, 'Has sido ascendido a moderador', '2023-11-30'),
 (8, 2, 'Has sido descendido a escritor', '2023-11-30'),
-(9, 9, 'Has recibido un strike', '2023-11-30'),
-(10, 7, 'Has recibido un strike', '2023-11-30');
+(9, 9, 'Has recibido un strike', '2023-11-30');
 
 -- --------------------------------------------------------
 
@@ -382,7 +382,9 @@ INSERT INTO `registro` (`id`, `tipo_sancion`, `id_sancionado`, `razon`, `id_mode
 (7, 'STRIKE', 7, 'Porque puedo', 7),
 (8, 'BAN', 7, 'Porq si', 7),
 (9, 'PERDON', 8, 'me arrepenti', 7),
-(10, 'BAN', 2, 'banned papu', 7);
+(10, 'BAN', 2, 'banned papu', 7),
+(11, 'STRIKE', 7, 'Por portarte mal', 7),
+(12, 'BAN', 7, 'por joto', 7);
 
 -- --------------------------------------------------------
 
@@ -457,7 +459,89 @@ INSERT INTO `resena` (`id`, `id_usuario`, `id_detalles`, `calificaciones`, `imag
 (9, 23, 12, 11, 'http://localhost:3000/images/1695044944376-bmw-serie-3-2023-28-996x664.jpg', 'Un auto lujoso de gama alta, vehiculo de uso cotidiano y personal.', 'BMW Series 3', NULL),
 (11, 7, 14, 0, 'http://localhost:3000/images/1699202985934-1694642469699-istockphoto-1273534607-612x612.jpg', 'SASsAs', '2000', 'https://www.youtube.com/watch?v=_6XzJPyAJDI'),
 (12, 7, 15, 0, 'http://localhost:3000/images/1699203045996-1694642469699-istockphoto-1273534607-612x612.jpg', 'ASAAS', 'ASAAS', 'https://www.youtube.com/watch?v=_6XzJPyAJDI'),
-(13, 7, 16, 0, 'http://localhost:3000/images/1699203144483-1694642469699-istockphoto-1273534607-612x612.jpg', 'ASAAS', 'ASAAS', 'https://www.youtube.com/watch?v=_6XzJPyAJDI');
+(13, 7, 16, 0, 'http://localhost:3000/images/1699203144483-1694642469699-istockphoto-1273534607-612x612.jpg', 'ASAAS', 'ASAAS', 'https://www.youtube.com/watch?v=_6XzJPyAJDI'),
+(14, 7, 17, 0, 'http://localhost:3000/images/1701950063452-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'ASASAS', 'ASASAS', 'undefined'),
+(15, 7, 18, 0, 'http://localhost:3000/images/1701950066120-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'ASASAS', 'ASASAS', 'undefined'),
+(16, 7, 19, 0, 'http://localhost:3000/images/1701950089451-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'ASASAS', 'ASASAS', 'undefined');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subforo`
+--
+
+CREATE TABLE `subforo` (
+  `id` int(11) NOT NULL,
+  `id_resena` int(11) NOT NULL,
+  `tipo` int(11) NOT NULL,
+  `silenciado` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `subforo`
+--
+
+INSERT INTO `subforo` (`id`, `id_resena`, `tipo`, `silenciado`) VALUES
+(1, 16, 0, 0),
+(2, 16, 1, 0),
+(3, 16, 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subforo_comentario`
+--
+
+CREATE TABLE `subforo_comentario` (
+  `id` int(11) NOT NULL,
+  `id_subforo` int(11) NOT NULL,
+  `texto` varchar(1500) DEFAULT NULL,
+  `imagen` varchar(1500) DEFAULT NULL,
+  `id_usuario` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `subforo_comentario`
+--
+
+INSERT INTO `subforo_comentario` (`id`, `id_subforo`, `texto`, `imagen`, `id_usuario`) VALUES
+(10, 1, 'Buenas', '', 7);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subforo_likes`
+--
+
+CREATE TABLE `subforo_likes` (
+  `id` int(11) NOT NULL,
+  `id_comentario` int(11) NOT NULL,
+  `point` int(11) DEFAULT 1,
+  `id_usuario` int(11) NOT NULL,
+  `id_subforo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subforo_replicas`
+--
+
+CREATE TABLE `subforo_replicas` (
+  `id` int(11) NOT NULL,
+  `id_subforo` int(11) NOT NULL,
+  `id_comentario` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `texto` varchar(800) DEFAULT NULL,
+  `imagen` varchar(500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `subforo_replicas`
+--
+
+INSERT INTO `subforo_replicas` (`id`, `id_subforo`, `id_comentario`, `id_usuario`, `texto`, `imagen`) VALUES
+(3, 1, 10, 7, 'Como estas', '');
 
 -- --------------------------------------------------------
 
@@ -483,7 +567,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
 (2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 1),
 (5, 'Diego', 'Mexicali', 'Diego@dev.gmail', 'usuario', '$2b$10$8BJJ.UIaqE.t282f/4Vth.YoBbey/xU1lmWLYnE0Qv6xgGpe4ILii', 2, 0),
-(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 2, 1),
+(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 1),
 (8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 0),
 (9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 2, 0),
 (10, 'prueba', 'el valle', 'prueba@test.cc', 'usuario', '$2b$10$YVgq6LvtjCUITg.v10uWsuyde/w4AlTPxitE8OL2QikyjXF8RrOs.', 0, 0),
@@ -663,6 +747,30 @@ ALTER TABLE `resena`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `subforo`
+--
+ALTER TABLE `subforo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `subforo_comentario`
+--
+ALTER TABLE `subforo_comentario`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `subforo_likes`
+--
+ALTER TABLE `subforo_likes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `subforo_replicas`
+--
+ALTER TABLE `subforo_replicas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -700,7 +808,7 @@ ALTER TABLE `calificaciones`
 -- AUTO_INCREMENT de la tabla `carrete`
 --
 ALTER TABLE `carrete`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `coches`
@@ -724,7 +832,7 @@ ALTER TABLE `comunicados`
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `foros`
@@ -760,7 +868,7 @@ ALTER TABLE `mensajes_replica`
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
@@ -772,7 +880,7 @@ ALTER TABLE `quejas`
 -- AUTO_INCREMENT de la tabla `registro`
 --
 ALTER TABLE `registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `reglas`
@@ -790,7 +898,31 @@ ALTER TABLE `reportes`
 -- AUTO_INCREMENT de la tabla `resena`
 --
 ALTER TABLE `resena`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `subforo`
+--
+ALTER TABLE `subforo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `subforo_comentario`
+--
+ALTER TABLE `subforo_comentario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `subforo_likes`
+--
+ALTER TABLE `subforo_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `subforo_replicas`
+--
+ALTER TABLE `subforo_replicas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
