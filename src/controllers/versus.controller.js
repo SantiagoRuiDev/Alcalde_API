@@ -34,6 +34,35 @@ export const createVersus = async (req, res) => {
 } 
 
 
+export const createVersusComentarios = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const formData = req.body;
+
+        // Crear un objeto asociativo a partir de formData
+
+        const formDataObject = {};
+
+        for (const [key, value] of Object.entries(formData)) {
+        formDataObject[key] = value;
+        }
+
+        const data = {
+            id_versus: id,
+            id_usuario: req.id,
+            mensaje: formDataObject.mensaje,
+            imagen: req.imageUrl
+        }
+
+        const newVersus = await versusModel.createVersusComentarios(data);
+
+        if(newVersus > 0) return res.status(200).json({"message": "Comentario creado correctamente"});
+        return res.status(403).json({"error": "Error al crear el comentario"})
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
 export const getVersus = async (req, res) => {
     try {
         const foundVersus = await versusModel.getVersus();
@@ -44,11 +73,25 @@ export const getVersus = async (req, res) => {
     }
 }
 
+export const eliminarVersusComentario = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const deleted = await versusModel.eliminarVersusComentario(id);
+
+        if(deleted > 0) return res.status(200).json({"message": "Comentario eliminado correctamente"});
+        return res.status(403).json({"error": "Error al eliminar el comentario"})
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
 export const getVersusById = async (req, res) => {
     try {
         const foundVersus = await versusModel.getVersusById(req.params.id);
+        const foundComentarios = await versusModel.getVersusComentarios(req.params.id);
         printMessage('Versus obtenido correctamente');
-        return res.status(200).json(foundVersus);
+        return res.status(200).json({versus: foundVersus, comentarios: foundComentarios});
     } catch (error) {
         printMessage(error);
     }

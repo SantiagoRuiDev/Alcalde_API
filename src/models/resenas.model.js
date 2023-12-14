@@ -15,6 +15,14 @@ export const getResenaById = async (id) => {
     return [result[0], details[0], carrete];
 }
 
+export const getComentariosResena = async (id) => {
+    const connection = await connectDatabase();
+    const [result] = await connection.query("SELECT r.id, r.id_usuario, r.mensaje, u.nombre FROM resena_comentarios AS r INNER JOIN usuarios AS u ON u.id = r.id_usuario WHERE id_resena = ?", [id]);
+
+    return result;
+
+}
+
 export const getResenaInfoById = async (id) => {
     const connection = await connectDatabase();
     const [result] = await connection.query("SELECT * FROM resena WHERE id = ?", [id]);
@@ -39,6 +47,13 @@ export const createResena = async (data) => {
         return result;
     }
     return 0;
+}
+
+export const createComentarioResena = async(data) => {
+    const connection = await connectDatabase();
+
+    const [result] = await connection.query("INSERT INTO resena_comentarios(id_resena, id_usuario, mensaje) VALUES (?, ?, ?)", [data.id_resena, data.id_usuario, data.mensaje]);
+    return result;
 }
 
 const createDetalles = async (data) => {

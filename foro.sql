@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-12-2023 a las 16:05:50
+-- Tiempo de generación: 14-12-2023 a las 15:18:22
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -330,7 +330,10 @@ CREATE TABLE `notificaciones` (
 INSERT INTO `notificaciones` (`id`, `id_usuario`, `mensaje`, `fecha`) VALUES
 (7, 2, 'Has sido ascendido a moderador', '2023-11-30'),
 (8, 2, 'Has sido descendido a escritor', '2023-11-30'),
-(9, 9, 'Has recibido un strike', '2023-11-30');
+(9, 9, 'Has recibido un strike', '2023-11-30'),
+(13, 7, 'Sancionado', '2023-12-14'),
+(14, 7, 'sancionado', '2023-12-14'),
+(15, 7, 'sancionado', '2023-12-14');
 
 -- --------------------------------------------------------
 
@@ -384,7 +387,10 @@ INSERT INTO `registro` (`id`, `tipo_sancion`, `id_sancionado`, `razon`, `id_mode
 (9, 'PERDON', 8, 'me arrepenti', 7),
 (10, 'BAN', 2, 'banned papu', 7),
 (11, 'STRIKE', 7, 'Por portarte mal', 7),
-(12, 'BAN', 7, 'por joto', 7);
+(12, 'BAN', 7, 'por joto', 7),
+(13, 'STRIKE', 7, 'Sancionado', 7),
+(14, 'STRIKE', 7, 'sancionado', 7),
+(15, 'STRIKE', 7, 'sancionado', 7);
 
 -- --------------------------------------------------------
 
@@ -463,6 +469,28 @@ INSERT INTO `resena` (`id`, `id_usuario`, `id_detalles`, `calificaciones`, `imag
 (14, 7, 17, 0, 'http://localhost:3000/images/1701950063452-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'ASASAS', 'ASASAS', 'undefined'),
 (15, 7, 18, 0, 'http://localhost:3000/images/1701950066120-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'ASASAS', 'ASASAS', 'undefined'),
 (16, 7, 19, 0, 'http://localhost:3000/images/1701950089451-1694049569813-motomel_skua_150cc_cross_2021_id2881_29.jpg', 'ASASAS', 'ASASAS', 'undefined');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resena_comentarios`
+--
+
+CREATE TABLE `resena_comentarios` (
+  `id` int(11) NOT NULL,
+  `id_resena` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `mensaje` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `resena_comentarios`
+--
+
+INSERT INTO `resena_comentarios` (`id`, `id_resena`, `id_usuario`, `mensaje`) VALUES
+(1, 16, 7, 'Buenas'),
+(2, 16, 7, 'Buen coche'),
+(3, 16, 7, 'As');
 
 -- --------------------------------------------------------
 
@@ -565,9 +593,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
-(2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 1),
+(2, 'Santiago', 'Mexicali', 'Juan@dev.gmail', 'escritor', '$2b$10$tRZNGKH9FXq97U7CfPzRSebuI09auFHufSFrAfQeuFyHKizLCMvWG', 3, 0),
 (5, 'Diego', 'Mexicali', 'Diego@dev.gmail', 'usuario', '$2b$10$8BJJ.UIaqE.t282f/4Vth.YoBbey/xU1lmWLYnE0Qv6xgGpe4ILii', 2, 0),
-(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 1),
+(7, 'Admin', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$b3gSxCZMzsL51gywFRPWTueUSqRlk4hNPwObo9qEFRtmThGLhBLCm', 3, 0),
 (8, 'prueba', 'panama', 'prueba@code.cc', 'usuario', '$2b$10$eQPrXLOa9Q6I8vNEdpSW7uiiHVRvCsLMrg7odDCW1W2ArQ107RM02', 1, 0),
 (9, 'san@dev.cc', 'atacama', 'foro@correo.cc', 'usuario', '$2b$10$3Ms0AzNoJ5E.psjq8bgqUeN8uarS4.b3v79MgzCjDhk9rkDChr2ey', 2, 0),
 (10, 'prueba', 'el valle', 'prueba@test.cc', 'usuario', '$2b$10$YVgq6LvtjCUITg.v10uWsuyde/w4AlTPxitE8OL2QikyjXF8RrOs.', 0, 0),
@@ -609,6 +637,27 @@ CREATE TABLE `versus` (
 INSERT INTO `versus` (`id`, `coche1_id`, `coche2_id`, `imagen`) VALUES
 (4, 7, 9, 'http://localhost:3000/images/1695304760532-1695052232856-istockphoto-1273534607-612x612.jpg'),
 (5, 5, 9, 'http://localhost:3000/images/1696187861210-1694642469699-istockphoto-1273534607-612x612.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `versus_comentarios`
+--
+
+CREATE TABLE `versus_comentarios` (
+  `id` int(11) NOT NULL,
+  `id_versus` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `mensaje` varchar(500) DEFAULT NULL,
+  `imagen` varchar(500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `versus_comentarios`
+--
+
+INSERT INTO `versus_comentarios` (`id`, `id_versus`, `id_usuario`, `mensaje`, `imagen`) VALUES
+(2, 5, 7, '', 'http://localhost:3000/images/foros/1702556974486-google_play_store.png');
 
 -- --------------------------------------------------------
 
@@ -747,6 +796,12 @@ ALTER TABLE `resena`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `resena_comentarios`
+--
+ALTER TABLE `resena_comentarios`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `subforo`
 --
 ALTER TABLE `subforo`
@@ -780,6 +835,12 @@ ALTER TABLE `usuarios`
 -- Indices de la tabla `versus`
 --
 ALTER TABLE `versus`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `versus_comentarios`
+--
+ALTER TABLE `versus_comentarios`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -868,7 +929,7 @@ ALTER TABLE `mensajes_replica`
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
@@ -880,7 +941,7 @@ ALTER TABLE `quejas`
 -- AUTO_INCREMENT de la tabla `registro`
 --
 ALTER TABLE `registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `reglas`
@@ -899,6 +960,12 @@ ALTER TABLE `reportes`
 --
 ALTER TABLE `resena`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `resena_comentarios`
+--
+ALTER TABLE `resena_comentarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `subforo`
@@ -935,6 +1002,12 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `versus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `versus_comentarios`
+--
+ALTER TABLE `versus_comentarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `versus_votos`

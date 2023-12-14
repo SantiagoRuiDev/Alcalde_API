@@ -17,8 +17,9 @@ export const getResenas = async (req, res) => {
 export const getResenaById = async (req, res) => {
     const resena = await resenasModel.getResenaById(req.params.id);
     const calificaciones = await calificacionesModel.getCalificacionByResena(req.params.id);
+    const comentarios = await resenasModel.getComentariosResena(req.params.id);
     printMessage("Se intento acceder a una reseña exitosamente");
-    if(resena.length > 0) return res.status(200).json({resena: resena, calif: calificaciones});
+    if(resena.length > 0) return res.status(200).json({resena: resena, calif: calificaciones, comentarios: comentarios});
     return res.status(400).json({"error": "No existe la reseña"});
 }
 
@@ -75,6 +76,23 @@ export const createResena = async (req, res) => {
         printMessage(error);
     }
 
+}
+
+
+export const createComentarioResena = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { comentario } = req.body;
+
+        const newComentario = await resenasModel.createComentarioResena({id_resena: id, id_usuario: req.id, mensaje: comentario});
+
+        if(newComentario.affectedRows > 0) return res.status(201).json({"message": "Comentario creado exitosamente"});
+
+        return res.status(400).json({"error": "No se pudo crear el comentario"});
+
+    } catch (error) {
+        printMessage(error);
+    }
 }
 
 export const addImageResena = async (req, res) => {

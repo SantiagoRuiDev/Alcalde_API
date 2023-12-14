@@ -15,6 +15,21 @@ export const getVersus = async () => {
     return versus;
 }
 
+export const eliminarVersusComentario = async (id) => {
+    const connection = await connectDatabase();
+    const [deleted] = await connection.query("DELETE FROM versus_comentarios WHERE id = ?;", [id]);
+
+    return deleted.affectedRows;
+}
+
+export const createVersusComentarios = async (data) => {
+    const connection = await connectDatabase();
+    const [newVersus] = await connection.query("INSERT INTO versus_comentarios(id_versus,id_usuario,mensaje, imagen) VALUES(?,?,?,?)", [data.id_versus, data.id_usuario, data.mensaje, data.imagen]);
+
+    return newVersus.affectedRows;
+
+}
+
 export const getVersusById = async (id) => {
     const connection = await connectDatabase();
     const [versus] = await connection.query("SELECT v.id AS versus_id, r1.id AS coche1_id, r2.id AS coche2_id, r1.calificaciones AS coche1_calificaciones, r2.calificaciones AS coche2_calificaciones, r1.imagen AS coche1_imagen, r2.imagen AS coche2_imagen, r1.titulo AS coche1_titulo, r2.titulo AS coche2_titulo FROM versus AS v INNER JOIN resena AS r1 ON v.coche1_id = r1.id INNER JOIN resena AS r2 ON v.coche2_id = r2.id WHERE v.id = ?;", [id]);
@@ -29,6 +44,13 @@ export const getVotoById = async (versus, id) => {
     return voto;
 }
 
+export const getVersusComentarios = async (id) => {
+    const connection = await connectDatabase();
+    const [comentarios] = await connection.query("SELECT vc.imagen, vc.mensaje, vc.id, vc.id_versus, vc.id_usuario, u.nombre FROM versus_comentarios AS vc INNER JOIN usuarios AS u ON vc.id_usuario = u.id WHERE vc.id_versus = ?;", [id]);
+
+    return comentarios;
+
+}
 
 export const getVotosInVersus = async (id) => {
     const connection = await connectDatabase();

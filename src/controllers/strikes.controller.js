@@ -10,7 +10,7 @@ export const strikeUsuario = async (req, res) => {
         const { razon } = req.body;
         const result = await strikesModel.strikeUsuario(id, req.id, razon);
        
-        if(result == false) return res.json({ message: 'No se pudo sancionar al usuario o fue baneado por acumular strikes' });
+        if(result.affectedRows == 0) return res.json({ message: 'No se pudo sancionar al usuario o fue baneado por acumular strikes' });
 
         printMessage(`Se le añadieron strikes al usuario ${id}`)
         return res.json({ message: 'Usuario sancionado correctamente' });

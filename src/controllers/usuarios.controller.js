@@ -2,6 +2,7 @@ import debug from 'debug';
 import jwt from 'jsonwebtoken';
 import * as usuarioModel from '../models/usuarios.model.js';
 import * as config from '../libs/config.js';
+import validator from 'validator';
 import sendPassRecover from '../libs/mailto.js';
 
 const secret_key = config.secret;
@@ -43,8 +44,9 @@ export const createUsuario = async (req,res) => {
 
         const usuario = {nombre, correo, ciudad, contraseña}; // Destructuramos los datos que enviamos desde el frontend
 
+        if(!validator.isStrongPassword(contraseña, { minLength: 8, minLowercase: 1, minUppercase: 1, minSymbols: 1 })) return res.status(400).json({error: 'La contraseña es muy insegura'});
+
         if(contraseña == "12345678") return res.status(400).json({error: 'La contraseña es muy insegura'});
-        if(contraseña.length < 8) return res.status(400).json({error: 'La contraseña debe tener al menos 8 caracteres'});
 
         if(!testEmail(correo)) return res.status(400).json({error: 'El correo no es valido'});
 
