@@ -18,8 +18,15 @@ export const getResenaById = async (req, res) => {
     const resena = await resenasModel.getResenaById(req.params.id);
     const calificaciones = await calificacionesModel.getCalificacionByResena(req.params.id);
     const comentarios = await resenasModel.getComentariosResena(req.params.id);
+    const motor = await resenasModel.getResenaMotor(req.params.id);
+    const chasis = await resenasModel.getResenaChasis(req.params.id);
+    const capacidades = await resenasModel.getResenaCapacidades(req.params.id);
+    const entretenimiento = await resenasModel.getResenaEntretenimiento(req.params.id);
+    const seguridad = await resenasModel.getResenaSeguridad(req.params.id);
+    const confort = await resenasModel.getResenaConfort(req.params.id);
+    const perfomance = await resenasModel.getResenaPerfomance(req.params.id);
     printMessage("Se intento acceder a una reseña exitosamente");
-    if(resena.length > 0) return res.status(200).json({resena: resena, calif: calificaciones, comentarios: comentarios});
+    if(resena.length > 0) return res.status(200).json({resena: resena, calif: calificaciones, comentarios: comentarios, motor: motor, chasis: chasis, capacidades: capacidades, entretenimiento: entretenimiento, seguridad: seguridad, confort: confort, perfomance: perfomance});
     return res.status(400).json({"error": "No existe la reseña"});
 }
 
@@ -37,31 +44,12 @@ export const createResena = async (req, res) => {
 
     const formData = req.body;
 
-    // Crear un objeto asociativo a partir de formData
-    const formDataObject = {};
+    formData.resena.id_usuario = decoded.id;
 
-    for (const [key, value] of Object.entries(formData)) {
-    formDataObject[key] = value;
-    }
-
-    const data = {
-        id_usuario: decoded.id,
-        modelo: formDataObject.modelo,
-        titulo: formDataObject.titulo,
-        descripcion: formDataObject.descripcion,
-        marca: formDataObject.marca,
-        ano: formDataObject.ano,
-        hp: formDataObject.hp,
-        puertas: formDataObject.puertas,
-        combustible: formDataObject.combustible,
-        transmision: formDataObject.transmision,
-        motor: formDataObject.motor,
-        video: formDataObject.video,
-        imagen: req.imageUrl
-    }
-
+    console.log(formData);
     try {
-        const newResena = await resenasModel.createResena(data);
+        // Crear reseña
+        const newResena = await resenasModel.createResena(formData);
         printMessage("Se intento crear una reseña exitosamente");
         if(newResena.affectedRows > 0) {
 
@@ -106,6 +94,20 @@ export const addImageResena = async (req, res) => {
         printMessage(error);
     }
 }
+
+
+export const addPortadaResena = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updated = await resenasModel.addPortadaResena(id, req.imageUrl);
+        
+        if(updated > 0) return res.status(200).json({"message": "Imagen agregada exitosamente"});
+        return res.status(400).json({"error": "No se pudo agregar la imagen"});
+    } catch (error) {
+        printMessage(error);
+    }
+}
+
 
 
 export const deleteResena = async (req, res) => {

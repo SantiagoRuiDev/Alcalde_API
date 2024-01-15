@@ -8,6 +8,14 @@ export const createForo = async (data) => {
     return newForo.affectedRows;
 }
 
+export const getForoByName = async (name) => {
+    const connection = await connectDatabase();
+    const [foro] = await connection.query('SELECT * FROM foros WHERE titulo = ?', [name]);
+
+    return foro;
+
+}
+
 export const listarForos = async () => {
     const connection = await connectDatabase();
     const [foros] = await connection.query('SELECT f.id AS foro_id, u.id AS autor_id, u.nombre AS autor_nombre, f.titulo AS foro_titulo FROM foros AS f INNER JOIN usuarios AS u ON u.id = f.id_usuario');

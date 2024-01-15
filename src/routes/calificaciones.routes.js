@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', validarLogin, getCalificaciones);
 router.get('/:id', validarLogin, getCalificacionById);
-router.post('/crear', validarLogin, validarBan, createCalificacion);
+router.post('/', validarLogin, validarBan, createCalificacion);
 
 export {
     router

@@ -29,4 +29,27 @@ const crearSuperAdmin = async() => {
     return printMessage('Super Admin nuevo creado con éxito');
 } // Esta funcion crea una cuenta super administradora si no registra cuentas super administradoras.
 
+const botAccount = {
+    nombre: "Automatizacion",
+    correo: "bot@alcaldeforo.com",
+    ciudad: "Mexicali",
+    rol: "bot",
+    contraseña: "12345678"
+}
+
+const crearBot = async() => {
+    const connection = await connectDatabase();
+
+    const [result] = await connection.execute('SELECT * FROM usuarios WHERE rol = ?', [botAccount.rol]);
+
+    if(result.length > 0) return;
+
+    const hash = await encryptPassword(botAccount.contraseña);
+    const query = 'INSERT INTO usuarios (nombre, correo, ciudad, rol, contraseña) VALUES(?, ?, ?, ?, ?)';
+    const [newBot] = await connection.execute(query, [botAccount.nombre, botAccount.correo, botAccount.ciudad, botAccount.rol, hash]);
+
+    return printMessage('Bot nuevo creado con éxito');
+}
+
+crearBot();
 crearSuperAdmin();

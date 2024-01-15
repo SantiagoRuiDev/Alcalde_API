@@ -7,11 +7,11 @@ import * as config from '../libs/config.js';
 const secret_key = config.secret;
 
 export const validarSesion = async (req, res, next) =>{
-    const token = req.headers['x-access-token'];
-
-    if(!token) return res.status(404).json({status: false})
-
     try {        
+        
+        const token = req.headers['x-access-token'];
+
+        if(!token) return res.status(404).json({status: false});
         const decoded = jwt.decode(token, secret_key);
         const isExpired = decoded.exp < Math.trunc((Date.now() / 1000));
         if(isExpired) return res.status(404).json({status: false});

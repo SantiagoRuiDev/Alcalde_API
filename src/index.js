@@ -26,12 +26,18 @@ import { router as subforoRouter } from './routes/subforo.routes.js';
 
 
 import { createServer } from "http";
-import { Server } from "socket.io"; //replaces (import socketIo from 'socket.io')
 // Llamamos dependencias aqui arriba.
+import { uploadFile, handleUpload } from './socket/uploadhandler.js';
+import * as socketHandler from "./socket/sockethandler.js";
+
+
+const app = express();
+
+const httpServer = createServer(app);
+const io = socketHandler.init(httpServer);
 
 // Declaramos y llamamos a funciones de las dependencias.
 const printMessage = debug('app:servidor');
-const app = express();
 
 // Usamos el express json para poder transformar los datos que nos llegan a json.
 app.use(express.json());
@@ -55,29 +61,8 @@ app.use('/api/registros', registrosRouter);
 app.use('/api/subforo', subforoRouter);
 
 
+app.post('/api/chat/upload', uploadFile('file'), handleUpload(io));
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, { cors: { origin: "*" } });
-
-io.on("connection", (socket) => {
-
-    socket.on("joinForo", async (id) => {
-      const messages = await 
-      socket.emit("receiveMessages", messages);
-    })
-  
-    socket.on("sendMessage", async (data) => {
-      const send = await sendMessage(data.token, data.message, data.room);
-      const messages = await joinRoom(data.room);
-      console.log("MensajeRecibido")
-      io.emit("receiveMessages", messages);
-      console.log("Emitido")
-    })
-  
-    socket.on("disconnect", () => {
-      console.log("Disconnected");
-    });
-  });
 // Listamos el servidor. En el puerto 3000 de nuestro http://localhost:{puerto}
 
 httpServer.listen(config.puerto, () => {

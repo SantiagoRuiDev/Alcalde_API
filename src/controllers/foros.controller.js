@@ -10,6 +10,11 @@ export const createForo = async (req, res) => {
     try {
         const { titulo } = req.body;
         const data = { titulo: titulo, id_usuario: req.id };
+
+        const getForo = await forosModel.getForoByName(titulo);
+
+        if(getForo.length > 0) return res.status(400).json({"error": "Ya existe un foro con ese nombre"});
+
         const foro = await forosModel.createForo(data);
     
         if(foro > 0) return res.status(201).json({"message": "Creaste un nuevo foro"});

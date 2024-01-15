@@ -12,7 +12,7 @@ import * as registroModel from './registro.model.js';
 
 export const getUsuarios = async () => {
     const connection = await connectDatabase();
-    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE rol != "superadmin"');
+    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE rol != "superadmin" AND rol != "bot"');
     return rows;
 }
 

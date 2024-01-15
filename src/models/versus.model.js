@@ -46,7 +46,7 @@ export const getVotoById = async (versus, id) => {
 
 export const getVersusComentarios = async (id) => {
     const connection = await connectDatabase();
-    const [comentarios] = await connection.query("SELECT vc.imagen, vc.mensaje, vc.id, vc.id_versus, vc.id_usuario, u.nombre FROM versus_comentarios AS vc INNER JOIN usuarios AS u ON vc.id_usuario = u.id WHERE vc.id_versus = ?;", [id]);
+    const [comentarios] = await connection.query("SELECT vc.imagen, vc.mensaje, vc.id, vc.id_versus, vc.id_usuario, u.nombre FROM versus_comentarios AS vc INNER JOIN usuarios AS u ON vc.id_usuario = u.id WHERE vc.id_versus = ? ORDER BY vc.id DESC;", [id]);
 
     return comentarios;
 
