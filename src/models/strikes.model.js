@@ -28,11 +28,10 @@ export const strikeUsuario = async (id, moderador, razon) => {
         const connection = await connectDatabase();
 
         const [info] = await connection.execute('SELECT strikes FROM usuarios WHERE id = ?', [id]);
-        if(info[0].strikes >= 3) {
+        if(info[0].strikes >= 2) {
             await banearMaxStrikes(id, moderador, razon),
             printMessage(`El usuario ${id} fue baneado por tener 3 strikes`)
             const notify = await notificacionesModel.createNotificacion(id, `Has sido baneado por tener 3 strikes`);
-            return false;
         }; 
 
         const registro = await registroModel.addRegistro('STRIKE', razon, id, moderador);

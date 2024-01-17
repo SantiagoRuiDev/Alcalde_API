@@ -1,11 +1,12 @@
 import Router from 'express';
-import { getUsuarios, createUsuario, loginUsuario, banUsuario, pardonUsuario, deleteUsuario, ascenderUsuario, degradarUsuario, getUsuarioByID, recoverPass, compareChangePass} from '../controllers/usuarios.controller.js';
+import { getUsuarios, createUsuario, loginUsuario, banUsuario, pardonUsuario, deleteUsuario, ascenderUsuario, degradarUsuario, getUsuarioByID, recoverPass, compareChangePass, isBanned} from '../controllers/usuarios.controller.js';
 import { validarLogin, validarAdmin, validarModerador, usuarioAdministrador, validarSesion } from '../middlewares/usuarios.middlewares.js';
 
 
 const router = Router();
 
 router.get('/', [validarLogin, validarModerador], getUsuarios);
+router.get('/banned', [validarLogin], isBanned);
 router.get('/:id', [validarLogin, validarModerador], getUsuarioByID);
 router.post('/admin', validarLogin, usuarioAdministrador);
 router.post('/create', createUsuario);

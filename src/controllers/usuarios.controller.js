@@ -32,6 +32,20 @@ export const getUsuarioByID = async (req, res) => {
     }
 }
 
+export const isBanned = async (req, res) => {
+    try{
+        const { id } = req;
+        const usuario = await usuarioModel.isBanned(id);
+
+        if(usuario.length > 0) {
+            return res.json({banned: true});
+        }
+        return res.json({banned: false});
+    } catch(error){
+        printMessage(error);
+    }
+}
+
 const testEmail = async (correo) => {
     const regex = /\S+@\S+\.\S+/;
     return regex.test(correo);

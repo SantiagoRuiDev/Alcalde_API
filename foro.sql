@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-01-2024 a las 21:43:08
+-- Tiempo de generación: 17-01-2024 a las 17:33:08
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -47,11 +47,11 @@ CREATE TABLE `calificaciones` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_resena` int(11) NOT NULL,
-  `gasolina` int(11) DEFAULT 0,
-  `confiabilidad` int(11) DEFAULT 0,
-  `confort` int(11) DEFAULT 0,
-  `diseno` int(11) DEFAULT 0,
-  `manejo` int(11) DEFAULT 0
+  `gasolina` int(11) DEFAULT 1,
+  `confiabilidad` int(11) DEFAULT 1,
+  `confort` int(11) DEFAULT 1,
+  `diseno` int(11) DEFAULT 1,
+  `manejo` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -59,8 +59,10 @@ CREATE TABLE `calificaciones` (
 --
 
 INSERT INTO `calificaciones` (`id`, `id_usuario`, `id_resena`, `gasolina`, `confiabilidad`, `confort`, `diseno`, `manejo`) VALUES
-(1, 1, 1, 5, 2, 3, 5, 2),
-(2, 1, 14, 0, 0, 3, 0, 0);
+(2, 1, 14, 0, 0, 3, 0, 0),
+(3, 2, 14, 2, 4, 4, 4, 5),
+(4, 2, 15, 3, 1, 1, 1, 1),
+(5, 1, 15, 5, 4, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -79,8 +81,11 @@ CREATE TABLE `carrete` (
 --
 
 INSERT INTO `carrete` (`id`, `imagen`, `id_resena`) VALUES
-(1, 'http://localhost:3000/images/1704990469605-ferra.jpg', 1),
-(2, 'http://localhost:3000/images/1705349914047-skua.jpg', 14);
+(4, 'http://localhost:3000/images\\1705504828266-audi.jpg', 14),
+(5, 'http://localhost:3000/images/1705505364195-audi.jpg', 15),
+(6, 'http://localhost:3000/images/1705505364224-bmw.jpg', 15),
+(7, 'http://localhost:3000/images/1705505364254-bora.jpg', 15),
+(8, 'http://localhost:3000/images/1705505364287-sedan.png', 15);
 
 -- --------------------------------------------------------
 
@@ -132,15 +137,19 @@ CREATE TABLE `detalles` (
   `marca` varchar(100) NOT NULL,
   `ano` int(11) NOT NULL DEFAULT 2000,
   `hp` int(11) NOT NULL DEFAULT 0,
-  `puertas` int(11) NOT NULL
+  `puertas` int(11) NOT NULL,
+  `precio_inicial` int(11) NOT NULL DEFAULT 0,
+  `precio_final` int(11) NOT NULL DEFAULT 0,
+  `etiquetas` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `detalles`
 --
 
-INSERT INTO `detalles` (`id`, `modelo`, `marca`, `ano`, `hp`, `puertas`) VALUES
-(16, '150', 'Motomel', 2017, 200, 0);
+INSERT INTO `detalles` (`id`, `modelo`, `marca`, `ano`, `hp`, `puertas`, `precio_inicial`, `precio_final`, `etiquetas`) VALUES
+(16, '150', 'Motomel', 2017, 200, 0, 1005000, 2350000, 'Moto, Ciudad'),
+(17, '1.8T', 'Volkswagen', 2009, 200, 4, 45000, 120000, 'Rendidor, Pickup, Ecologico');
 
 -- --------------------------------------------------------
 
@@ -188,6 +197,17 @@ CREATE TABLE `mensajes` (
   `mensaje` varchar(1500) DEFAULT '',
   `imagen` varchar(130) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `mensajes`
+--
+
+INSERT INTO `mensajes` (`id`, `id_usuario`, `id_foro`, `mensaje`, `imagen`) VALUES
+(15, 1, 1, 'sa', ''),
+(17, 2, 1, 'sa', ''),
+(18, 2, 1, 'sa', ''),
+(19, 2, 1, 'tonto', ''),
+(20, 2, 1, 'Buens', '');
 
 -- --------------------------------------------------------
 
@@ -245,8 +265,9 @@ CREATE TABLE `notificaciones` (
 --
 
 INSERT INTO `notificaciones` (`id`, `id_usuario`, `mensaje`, `fecha`) VALUES
-(1, 2, 'Palabras Prohibidas', '2024-01-11'),
-(2, 2, 'Palabras Prohibidas', '2024-01-11');
+(4, 2, 'Has sido baneado por tener 3 strikes', '2024-01-17'),
+(5, 2, 'Has sido baneado por tener 3 strikes', '2024-01-17'),
+(6, 2, 'Palabras Prohibidas', '2024-01-17');
 
 -- --------------------------------------------------------
 
@@ -279,7 +300,11 @@ CREATE TABLE `registro` (
 --
 
 INSERT INTO `registro` (`id`, `tipo_sancion`, `id_sancionado`, `razon`, `id_moderador`) VALUES
-(2, 'STRIKE', 2, 'Palabras Prohibidas', 3);
+(2, 'STRIKE', 2, 'Palabras Prohibidas', 3),
+(3, 'STRIKE', 2, 'Palabras Prohibidas', 3),
+(4, 'BAN', 2, 'Palabras Prohibidas', 3),
+(5, 'BAN', 2, 'Palabras Prohibidas', 3),
+(6, 'STRIKE', 2, 'Palabras Prohibidas', 3);
 
 -- --------------------------------------------------------
 
@@ -339,7 +364,8 @@ CREATE TABLE `resena` (
 --
 
 INSERT INTO `resena` (`id`, `id_usuario`, `id_detalles`, `calificaciones`, `imagen`, `descripcion`, `titulo`, `video`) VALUES
-(14, 1, 16, 0, 'http://localhost:3000/images/1705349914085-tornado.jpg', 'La moto mas rendidora en la ciudad', 'Skua', '_6XzJPyAJDI');
+(14, 1, 16, 0, 'http://localhost:3000/images/1705349914085-tornado.jpg', 'La moto mas rendidora en la ciudad', 'Skua', '_6XzJPyAJDI'),
+(15, 2, 17, 0, 'http://localhost:3000/images/1705505364159-bora.jpg', 'El coche elegido en Argentina', 'Bora', 'Opxhh9Oh3rg');
 
 -- --------------------------------------------------------
 
@@ -365,7 +391,8 @@ CREATE TABLE `resena_chasis` (
 --
 
 INSERT INTO `resena_chasis` (`id`, `resena_id`, `motor`, `traccion`, `tranmision`, `frenos`, `neumaticos`, `suspdelantero`, `susptrasera`, `direccion`) VALUES
-(13, 14, 'Centro', 'Arrastre', 'Manual', 'Frenos a disco', 'Pirelli', 'Si', 'Si', 'No');
+(13, 14, 'Centro', 'Arrastre', 'Manual', 'Frenos a disco', 'Pirelli', 'Si', 'Si', 'No'),
+(14, 15, 'Centro', 'Arrastre', 'Manual', 'Si', 'Si', 'Si', 'Si', 'Si');
 
 -- --------------------------------------------------------
 
@@ -379,6 +406,15 @@ CREATE TABLE `resena_comentarios` (
   `id_usuario` int(11) NOT NULL,
   `mensaje` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `resena_comentarios`
+--
+
+INSERT INTO `resena_comentarios` (`id`, `id_resena`, `id_usuario`, `mensaje`) VALUES
+(1, 15, 2, 'b'),
+(2, 15, 1, 'como estas'),
+(3, 15, 1, 'ass');
 
 -- --------------------------------------------------------
 
@@ -415,7 +451,8 @@ CREATE TABLE `resena_confort` (
 --
 
 INSERT INTO `resena_confort` (`id`, `resena_id`, `aire`, `asientosd`, `asientost`, `cierre`, `espejoi`, `espejoe`, `farosniebla`, `farosdelanteros`, `cambios`, `quemacocos`, `rines`, `vestiduras`, `crucero`, `vidrios`, `volante`, `cajuela`, `sensor`, `camara`, `computadora`) VALUES
-(2, 14, 'No', 'No', 'No', 'No', '1', '2', 'No', 'Si', 'No', 'No', 'No', 'No', 'No', 'No', 'No', 'Si', 'No', 'No', 'No');
+(2, 14, 'No', 'No', 'No', 'No', '1', '2', 'No', 'Si', 'No', 'No', 'No', 'No', 'No', 'No', 'No', 'Si', 'No', 'No', 'No'),
+(3, 15, 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si');
 
 -- --------------------------------------------------------
 
@@ -438,7 +475,8 @@ CREATE TABLE `resena_entretenimiento` (
 --
 
 INSERT INTO `resena_entretenimiento` (`id`, `resena_id`, `musica`, `bocinas`, `conex`, `bluetooth`, `tablero`) VALUES
-(4, 14, 'No', 'Si', 'No', 'No', 'No');
+(4, 14, 'No', 'Si', 'No', 'No', 'No'),
+(5, 15, 'Si', 'Si', 'Si', 'Si', 'Si');
 
 -- --------------------------------------------------------
 
@@ -472,7 +510,8 @@ CREATE TABLE `resena_medidas` (
 --
 
 INSERT INTO `resena_medidas` (`id`, `resena_id`, `largo`, `alto`, `ancho`, `distanciaejes`, `cajuela`, `tanque`, `peso`, `capacidadcarga`, `alturapiso`, `capacidadvadeo`, `anguloataque`, `angulopartida`, `anguloventral`, `remolque`, `escalonamiento`, `inclinacion`) VALUES
-(6, 14, '200', '110', '70', '250', 'No', '10', '1250', '350 KG', '60', '2000', '90 deg', '60 deg', '-50 deg', 'Si', 'Si', '200');
+(6, 14, '200', '110', '70', '250', 'No', '10', '1250', '350 KG', '60', '2000', '90 deg', '60 deg', '-50 deg', 'Si', 'Si', '200'),
+(7, 15, '220', '80', '90', '20', '50', '80', '4500', '2400', '30', '30', '30deg', '30deg', '70deg', 'Si', '30deg', '50deg');
 
 -- --------------------------------------------------------
 
@@ -497,7 +536,8 @@ CREATE TABLE `resena_motor` (
 --
 
 INSERT INTO `resena_motor` (`id`, `resena_id`, `combustible`, `potencia`, `torque`, `cilindros`, `valvulas`, `alimentacion`, `sistema`) VALUES
-(13, 14, 'Nafta', 200, 'Arrastre', 150, '3', 'Interna', 'Si');
+(13, 14, 'Nafta', 200, 'Arrastre', 150, '3', 'Interna', 'Si'),
+(14, 15, 'Diesel', 200, 'Arrastre', 200, 'º5', 'Interna', 'Si');
 
 -- --------------------------------------------------------
 
@@ -520,7 +560,8 @@ CREATE TABLE `resena_perfomance` (
 --
 
 INSERT INTO `resena_perfomance` (`id`, `resena_id`, `aceleracion`, `velocidad`, `rendimientociudad`, `rendimientoruta`, `rendimientomixto`) VALUES
-(13, 14, 65, 250, 'Excelente', 'Estandar', 'Bueno');
+(13, 14, 65, 250, 'Excelente', 'Estandar', 'Bueno'),
+(14, 15, 78, 170, 'Bueno', 'Bueno', 'Regular');
 
 -- --------------------------------------------------------
 
@@ -551,7 +592,8 @@ CREATE TABLE `resena_seguridad` (
 --
 
 INSERT INTO `resena_seguridad` (`id`, `resena_id`, `airbag`, `abs`, `distfrenado`, `asistfrenado`, `alarma`, `anclaje`, `cinturones`, `otros`, `sensor`, `terceraluz`, `autobloqueo`, `controlestabilidad`, `controltraccion`) VALUES
-(4, 14, 'Si', 'Si', 'No', 'No', 'Si', 'No', 'No', 'No', 'No', 'No', 'No', 'Si', 'No');
+(4, 14, 'Si', 'Si', 'No', 'No', 'Si', 'No', 'No', 'No', 'No', 'No', 'No', 'Si', 'No'),
+(5, 15, 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si', 'Si');
 
 -- --------------------------------------------------------
 
@@ -579,7 +621,10 @@ INSERT INTO `subforo` (`id`, `id_resena`, `tipo`, `silenciado`) VALUES
 (6, 13, 2, 0),
 (7, 14, 0, 0),
 (8, 14, 1, 0),
-(9, 14, 2, 0);
+(9, 14, 2, 0),
+(10, 15, 0, 0),
+(11, 15, 1, 0),
+(12, 15, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -594,6 +639,15 @@ CREATE TABLE `subforo_comentario` (
   `imagen` varchar(1500) DEFAULT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `subforo_comentario`
+--
+
+INSERT INTO `subforo_comentario` (`id`, `id_subforo`, `texto`, `imagen`, `id_usuario`) VALUES
+(1, 9, '', 'http://localhost:3000/images/foros/1705501735098-bmw.jpg', 2),
+(3, 10, 'buenas', '', 1),
+(5, 10, 'hola', '', 2);
 
 -- --------------------------------------------------------
 
@@ -624,6 +678,13 @@ CREATE TABLE `subforo_replicas` (
   `imagen` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `subforo_replicas`
+--
+
+INSERT INTO `subforo_replicas` (`id`, `id_subforo`, `id_comentario`, `id_usuario`, `texto`, `imagen`) VALUES
+(6, 10, 2, 2, 'yo bien', '');
+
 -- --------------------------------------------------------
 
 --
@@ -647,7 +708,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nombre`, `ciudad`, `correo`, `rol`, `contraseña`, `strikes`, `ban`) VALUES
 (1, 'ADMIN', 'Cancun', 'admin@alcaldeforo.com', 'superadmin', '$2b$10$5r7Rp1ybTfWQbjbQ0tsNUuLYKiTdDWWDrzl3ojJB3PKSu4C0b9w6K', 0, 0),
-(2, 'Jorge', 'Mexicali', 'test@gmail.com', 'escritor', '$2b$10$HOeSCYqgg8vazb8Ie28CfuZ/BGBtihcQCidBWrRFA.ZZFSUD86DRC', 2, 0),
+(2, 'Jorge', 'Mexicali', 'test@gmail.com', 'escritor', '$2b$10$HOeSCYqgg8vazb8Ie28CfuZ/BGBtihcQCidBWrRFA.ZZFSUD86DRC', 3, 0),
 (3, 'Automatizacion', 'Mexicali', 'bot@alcaldeforo.com', 'bot', '$2b$10$l2H0MoOdolNIuBwDTlvymuNdF.ikZJIBwFoV8eTMOVCZ682H.tKay', 0, 0);
 
 -- --------------------------------------------------------
@@ -913,13 +974,13 @@ ALTER TABLE `articulos`
 -- AUTO_INCREMENT de la tabla `calificaciones`
 --
 ALTER TABLE `calificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `carrete`
 --
 ALTER TABLE `carrete`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `coches`
@@ -943,7 +1004,7 @@ ALTER TABLE `comunicados`
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `foros`
@@ -961,13 +1022,13 @@ ALTER TABLE `listas`
 -- AUTO_INCREMENT de la tabla `mensajes`
 --
 ALTER TABLE `mensajes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `mensajes_likes`
 --
 ALTER TABLE `mensajes_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `mensajes_replica`
@@ -979,7 +1040,7 @@ ALTER TABLE `mensajes_replica`
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `quejas`
@@ -991,7 +1052,7 @@ ALTER TABLE `quejas`
 -- AUTO_INCREMENT de la tabla `registro`
 --
 ALTER TABLE `registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `reglas`
@@ -1009,79 +1070,79 @@ ALTER TABLE `reportes`
 -- AUTO_INCREMENT de la tabla `resena`
 --
 ALTER TABLE `resena`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_chasis`
 --
 ALTER TABLE `resena_chasis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_comentarios`
 --
 ALTER TABLE `resena_comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_confort`
 --
 ALTER TABLE `resena_confort`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_entretenimiento`
 --
 ALTER TABLE `resena_entretenimiento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_medidas`
 --
 ALTER TABLE `resena_medidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_motor`
 --
 ALTER TABLE `resena_motor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_perfomance`
 --
 ALTER TABLE `resena_perfomance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `resena_seguridad`
 --
 ALTER TABLE `resena_seguridad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `subforo`
 --
 ALTER TABLE `subforo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `subforo_comentario`
 --
 ALTER TABLE `subforo_comentario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `subforo_likes`
 --
 ALTER TABLE `subforo_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `subforo_replicas`
 --
 ALTER TABLE `subforo_replicas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

@@ -58,18 +58,22 @@ export const createMessage = async (data) => {
 
     const usuario = await usuariosModel.getUsuarioByID(id);
 
+    const userBanned = await usuariosModel.isBanned(id);
+
+    if(userBanned.length > 0) {
+        return { status: 0, error: "Estas baneado, no puedes enviar mensajes" };
+    }
+
     if (usuario[0].rol === "usuario" || usuario[0].rol === "escritor") {
       const foroEstado = await forosModel.getForoEstado(room);
       if (foroEstado[0].estado === 0)
-        return res.status(400).json({ message: "Foro silenciado" });
+        return { status: 0, error: "Foro silenciado" }
 
       const splited = getProhibidas[0].contenido.split(", ");
 
       if (splited.some((palabra) => text.includes(palabra))) {
         await strikesModel.strikeUsuario(id, await getBotID(), "Palabras Prohibidas");
-        return res
-          .status(400)
-          .json({ message: "Mensaje no permitido, se te añadio un strike" });
+        return { status: 0, error: "Mensaje no permitido, se te añadio un strike" };
       }
     }
 
@@ -89,7 +93,7 @@ export const createReply = async (data) => {
     const file = data.file.filename;
     const idReply = data.id_reply;
 
-
+    
     let datos;
     if (Array.isArray(text)) {
       text.reverse();
@@ -115,18 +119,23 @@ export const createReply = async (data) => {
 
     const usuario = await usuariosModel.getUsuarioByID(id);
 
+    
+    const userBanned = await usuariosModel.isBanned(id);
+
+    if(userBanned.length > 0) {
+        return { status: 0, error: "Estas baneado, no puedes enviar mensajes" };
+    }
+
     if (usuario[0].rol === "usuario" || usuario[0].rol === "escritor") {
       const foroEstado = await forosModel.getForoEstado(room);
       if (foroEstado[0].estado === 0)
-        return res.status(400).json({ message: "Foro silenciado" });
+        return  { status: 0, error: "Foro silenciado" }
 
       const splited = getProhibidas[0].contenido.split(", ");
 
       if (splited.some((palabra) => text.includes(palabra))) {
         await strikesModel.strikeUsuario(id, await getBotID(), "Palabras Prohibidas");
-        return res
-          .status(400)
-          .json({ message: "Mensaje no permitido, se te añadio un strike" });
+        return  { status: 0, error: "Mensaje no permitido, se te añadio un strike" }
       }
     }
 
@@ -148,6 +157,12 @@ export const deleteMessage = async (data) => {
 
     const rol = result[0].rol;
 
+    
+    const userBanned = await usuariosModel.isBanned(id);
+
+    if(userBanned.length > 0) {
+        return { status: 0, error: "Estas baneado, no puedes realizar esta accion" };
+    }
     
     if(rol === "moderador" || rol === "admin" || rol === "superadmin"){
         const datos = {id: data.id_mensaje}
@@ -174,6 +189,12 @@ export const deleteReply = async (data) => {
     
         const rol = result[0].rol;
     
+        
+        const userBanned = await usuariosModel.isBanned(id);
+
+        if(userBanned.length > 0) {
+            return { status: 0, error: "Estas baneado, no puedes realizar esta accion" };
+        }
         
         if(rol === "moderador" || rol === "admin" || rol === "superadmin"){
             const datos = {id: data.id_reply}

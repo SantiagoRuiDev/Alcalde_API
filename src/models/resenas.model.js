@@ -3,14 +3,17 @@ import { connectDatabase } from "../database/db.js";
 export const getResenas = async () => {
     const connection = await connectDatabase();
     const [result] = await connection.query("SELECT * FROM resena");
-    return result;
+    const [detalles] = await connection.query("SELECT * FROM detalles");
+    const [chasis] = await connection.query("SELECT * FROM resena_medidas");
+
+    return [result, detalles, chasis];
 }
 
 export const getResenaById = async (id) => {
     const connection = await connectDatabase();
     const [result] = await connection.query("SELECT * FROM resena WHERE id = ?", [id]);
     const [details] = await connection.query("SELECT * FROM detalles WHERE id = ?", [result[0].id_detalles]);
-    const [carrete] = await connection.query("SELECT * FROM carrete WHERE id_resena = ?", [id]);
+    const [carrete] = await connection.query("SELECT * FROM carrete WHERE id_resena = ? LIMIT 7", [id]);
 
     return [result[0], details[0], carrete];
 }
@@ -77,8 +80,8 @@ export const createComentarioResena = async(data) => {
 
 const createDetalles = async (data) => {
     const connection = await connectDatabase();
-    const [result] = await connection.query("INSERT INTO detalles(modelo, marca, ano, hp, puertas) VALUES (?, ?, ?, ?, ?)", 
-                                            [data.resena.modelo, data.resena.marca, data.resena.ano, data.resena.hp, data.resena.puertas]);
+    const [result] = await connection.query("INSERT INTO detalles(modelo, marca, ano, hp, puertas, precio_inicial, precio_final, etiquetas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+                                            [data.resena.modelo, data.resena.marca, data.resena.ano, data.resena.hp, data.resena.puertas, data.resena.inicial, data.resena.final, data.resena.etiquetas]);
 
     return result.insertId;
 }

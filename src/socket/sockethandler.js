@@ -9,6 +9,16 @@ function init(server){
     io.on("connection", (socket) => {
 
 
+        socket.on('joinResena', async (room) => {
+            socket.join(room);
+
+            io.to(room).emit('resenaUpdate', room);
+        })
+
+        socket.on('resenaUpdate', async (room) => {
+            io.to(room).emit('resenaUpdate', room);
+        })
+
         socket.on('joinForo', async (data) => {
             
             socket.join(data.room);
@@ -25,6 +35,8 @@ function init(server){
                 const room = await getForo(data);
 
                 io.to(data.room).emit('joinForo', room);
+            } else {
+                socket.emit('error', { status: 0, message: message.error });
             }
         })
 
@@ -35,6 +47,8 @@ function init(server){
                 const room = await getForo(data);
 
                 io.to(data.room).emit('joinForo', room);
+            } else {
+                socket.emit('error', { status: 0, message: message.error });
             }
         });
 
@@ -45,6 +59,8 @@ function init(server){
                 const room = await getForo(data);
 
                 io.to(data.room).emit('joinForo', room);
+            } else {
+                socket.emit('error', { status: 0, message: message.error });
             }
         });
 
@@ -55,6 +71,8 @@ function init(server){
                 const room = await getForo(data);
 
                 io.to(data.room).emit('joinForo', room);
+            } else {
+                socket.emit('error', { status: 0, message: message.error });
             }
         });
 

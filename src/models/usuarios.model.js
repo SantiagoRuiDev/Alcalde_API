@@ -16,7 +16,6 @@ export const getUsuarios = async () => {
     return rows;
 }
 
-
 export const createUsuario = async (usuario) => {
     const { contraseña, nombre, correo, ciudad } = usuario;
     
@@ -157,4 +156,10 @@ export const changePass = async (id, pass) => {
 
     const [deleteCode] = await connection.execute('DELETE FROM codigos WHERE id_usuario = ?', [id]);
     return rows.affectedRows;
+}
+
+export const isBanned = async (id) => {
+    const connection = await connectDatabase();
+    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE id = ? AND ban = 1', [id]);
+    return rows;
 }
