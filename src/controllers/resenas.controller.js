@@ -14,11 +14,12 @@ export const getResenas = async (req, res) => {
     if(viewerIsLogged) {
         const token = req.headers["x-access-token"];
         const decoded = jwt.verify(token, config.secret);
+        const userPreferences = await resenasModel.getUserPreferences(req.id);
         req.id = decoded.id;
+        if(resenas.length > 0) return res.status(200).json({resenas: resenas, userPreferences: userPreferences});
     }
-    const userPreferences = await resenasModel.getUserPreferences(req.id);
     printMessage("Se intento acceder a las reseñas exitosamente");
-    if(resenas.length > 0) return res.status(200).json({resenas: resenas, userPreferences: userPreferences});
+    if(resenas.length > 0) return res.status(200).json({resenas: resenas});
     return res.status(400).json({"error": "No hay reseñas"});
 }
 
