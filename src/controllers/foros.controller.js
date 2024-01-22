@@ -25,6 +25,24 @@ export const createForo = async (req, res) => {
     }
 }
 
+export const likeReply = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const data = { id_votante: req.id, id_reply: req.body.id_reply, id_foro: id };
+
+        const like = await forosModel.likeReply(data);
+
+        if(like > 0) return res.status(200).json({"message": "Diste like o quitaste el like correctamente"});
+
+        return res.status(400).json({"message": "No se pudo crear el like"});
+
+    } catch (error) {
+        printMessage(error);
+    }
+
+}
+
 
 export const listarForos = async (req, res) => {
     try {

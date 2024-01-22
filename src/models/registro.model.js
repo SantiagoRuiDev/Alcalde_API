@@ -8,6 +8,9 @@ export const addRegistro = async (tipo, descripcion, sancionado, moderador) => {
     "INSERT INTO registro (tipo_sancion, razon, id_sancionado, id_moderador) VALUES (?, ?, ?, ?)",
     [tipo, descripcion, sancionado, moderador]
   );
+
+  
+  connection.end();
   return result.affectedRows;
 };
 
@@ -30,5 +33,7 @@ INNER JOIN
 ORDER BY 
   r.id DESC;`);
 
+  
+  connection.end();
   return result;
 };

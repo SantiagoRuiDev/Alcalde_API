@@ -26,6 +26,7 @@ const crearSuperAdmin = async() => {
     const query = 'INSERT INTO usuarios (nombre, correo, ciudad, rol, contraseña) VALUES(?, ?, ?, ?, ?)';
     const [newSuperAdmin] = await connection.execute(query, [account.nombre, account.correo, account.ciudad, account.rol, hash]);
 
+    connection.end();
     return printMessage('Super Admin nuevo creado con éxito');
 } // Esta funcion crea una cuenta super administradora si no registra cuentas super administradoras.
 
@@ -48,6 +49,7 @@ const crearBot = async() => {
     const query = 'INSERT INTO usuarios (nombre, correo, ciudad, rol, contraseña) VALUES(?, ?, ?, ?, ?)';
     const [newBot] = await connection.execute(query, [botAccount.nombre, botAccount.correo, botAccount.ciudad, botAccount.rol, hash]);
 
+    connection.end();
     return printMessage('Bot nuevo creado con éxito');
 }
 

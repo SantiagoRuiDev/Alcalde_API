@@ -16,6 +16,7 @@ const banearMaxStrikes = async (id, moderador, razon) => {
 
         const registro = await registroModel.addRegistro('BAN', razon, id, moderador);
 
+        connection.end();
         return result.affectedRows;
     } catch(error){
         printMessage(error);
@@ -39,6 +40,7 @@ export const strikeUsuario = async (id, moderador, razon) => {
         const notify = await notificacionesModel.createNotificacion(id, razon);
 
         const [result] = await connection.execute('UPDATE usuarios SET strikes = strikes + 1 WHERE id = ?', [id]);
+        connection.end();
         return result;
 
     } catch (error) {
@@ -57,6 +59,8 @@ export const quitarStrikeUsuario = async (id, moderador) => {
         const registro = await registroModel.addRegistro('STRIKE', 'Se quito un strike', id, moderador);
 
         const [result] = await connection.execute('UPDATE usuarios SET strikes = strikes - 1 WHERE id = ?', [id]);
+        
+        connection.end();
         return result;
 
     } catch (error) {

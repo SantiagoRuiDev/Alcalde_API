@@ -99,6 +99,21 @@ export const likeComentario = async (req, res) => {
 }
 
 
+export const likeReply = async (req, res) => {
+    try {
+        const { subforo } = req.params;
+    
+        const like = await subforoModel.likeReply(req.body.id_reply, req.id, subforo);
+    
+        if(like > 0) return res.status(200).json({message: "Like agregado con éxito"});
+
+        return res.status(400).json({error: "No se pudo agregar el like"})
+    } catch (error) {
+        return res.status(500).json({"error": error.message});
+    }
+}
+
+
 export const replyComentario = async (req, res) => {
     try {
         const { resena, tipo, comentario } = req.params;

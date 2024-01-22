@@ -13,6 +13,7 @@ import * as registroModel from './registro.model.js';
 export const getUsuarios = async () => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('SELECT * FROM usuarios WHERE rol != "superadmin" AND rol != "bot"');
+    connection.end();
     return rows;
 }
 
@@ -25,18 +26,21 @@ export const createUsuario = async (usuario) => {
  
     const query = 'INSERT INTO usuarios (nombre, correo, ciudad, contraseña) VALUES (?, ?, ?, ?)';
     const [result] = await connection.execute(query, [nombre, correo, ciudad, encryptedPass]);
+    connection.end();
     return result.affectedRows; // Si el usuario no existe procede a crear uno nuevo
 }
 
 export const loginUsuario = async (usuario) => {
     const connection = await connectDatabase();
-    const query = 'SELECT id FROM usuarios WHERE correo = ?';
+    const query = 'SELECT * FROM usuarios WHERE correo = ?';
 
     if(await comparePassword(usuario.contraseña, usuario.correo)){
         const [userId] = await connection.execute(query, [usuario.correo]);
-        return userId;
+        connection.end();
+        return {id: userId[0].id, rol: userId[0].rol};
     } // Esta funcion compara las contraseñas y nos permite ver si hay similitud entre ellas.
 
+    connection.end();
     return [{id: undefined}]; // Si no, retorna un id indenifido.
 }
 
@@ -47,6 +51,7 @@ export const banUsuario = async (id, moderador, razon) => {
     const registro = await registroModel.addRegistro('BAN', razon, id, moderador);
 
     const [result] = await connection.execute(query, [id]);
+    connection.end();
     return result.changedRows;
 }
 
@@ -57,6 +62,7 @@ export const pardonUsuario = async (id, moderador, razon) => {
     const registro = await registroModel.addRegistro('PERDON', razon, id, moderador);
 
     const [result] = await connection.execute(query, [id]);
+    connection.end();
     return result.changedRows;
 }
 
@@ -65,6 +71,7 @@ export const deleteUsuario = async (id) => {
     const query = 'DELETE FROM usuarios WHERE id = ?';
 
     const [result] = await connection.execute(query, [id]);
+    connection.end();
     return result.affectedRows;
 }
 
@@ -92,6 +99,7 @@ export const ascenderUsuario = async (id, moderador) => {
     const query = 'UPDATE usuarios SET rol = ? WHERE id = ?';
 
     const [result] = await connection.execute(query, [newRol, id]);
+    connection.end();
     return result.changedRows;
 }
 
@@ -119,18 +127,21 @@ export const degradarUsuario = async (id, moderador) => {
     const query = 'UPDATE usuarios SET rol = ? WHERE id = ?';
 
     const [result] = await connection.execute(query, [newRol, id]);
+    connection.end();
     return result.changedRows;
 }
 
 export const getUsuarioByID = async (id) => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('SELECT * FROM usuarios WHERE id = ?', [id]);
+    connection.end();
     return rows;
 }
 
 export const getUsuarioByCorreo = async (correo) => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('SELECT * FROM usuarios WHERE correo = ?', [correo]);
+    connection.end();
     return rows;
 }
 
@@ -138,6 +149,7 @@ export const getUsuarioByCorreo = async (correo) => {
 export const getUsuarioByCode = async (code) => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('SELECT * FROM codigos WHERE codigo = ?', [code]);
+    connection.end();
     return rows;
 }
 
@@ -145,6 +157,7 @@ export const getUsuarioByCode = async (code) => {
 export const saveRecoverCode = async (id, code) => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('INSERT INTO codigos(id_usuario, codigo) VALUES (?, ?)', [id, code]);
+    connection.end();
 
     return rows.affectedRows;
 }
@@ -155,11 +168,13 @@ export const changePass = async (id, pass) => {
     const [rows] = await connection.execute('UPDATE usuarios SET contraseña = ? WHERE id = ?', [hash, id]);
 
     const [deleteCode] = await connection.execute('DELETE FROM codigos WHERE id_usuario = ?', [id]);
+    connection.end();
     return rows.affectedRows;
 }
 
 export const isBanned = async (id) => {
     const connection = await connectDatabase();
     const [rows] = await connection.execute('SELECT * FROM usuarios WHERE id = ? AND ban = 1', [id]);
+    connection.end();
     return rows;
 }

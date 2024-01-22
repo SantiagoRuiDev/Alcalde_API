@@ -77,11 +77,11 @@ export const createUsuario = async (req,res) => {
         if(result > 0) { // Si el resultado es indiferente a falso, devolvemos un token para autentificar.
             const firstLogin = await usuarioModel.loginUsuario(usuario); // Llamamos el modelo para logear.
 
-            if(firstLogin[0].id === undefined) return res.status(404).json({error: 'Usuario no encontrado o credenciales incorrectas'}); // Si el resultado es indefinido, devolvemos error.
+            if(firstLogin.id === undefined) return res.status(404).json({error: 'Usuario no encontrado o credenciales incorrectas'}); // Si el resultado es indefinido, devolvemos error.
 
-            const token = jwt.sign({id: firstLogin[0].id}, secret_key, {expiresIn: 86400});
+            const token = jwt.sign({id: firstLogin.id}, secret_key, {expiresIn: 86400});
                 printMessage('Un usuario accedio correctamente a su cuenta');
-                return res.json(token);// Si no, creamos un token  y lo retornamos
+                return res.json({token: token, user: {id: firstLogin.id, rol: firstLogin.rol}});// Si no, creamos un token  y lo retornamos
         };
         
         printMessage('Un usuario intento crear una cuenta que ya existe');
@@ -97,11 +97,11 @@ export const loginUsuario = async (req, res) => {
         
         const result = await usuarioModel.loginUsuario(usuario); // Llamamos el modelo para logear.
 
-        if(result[0].id === undefined) return res.status(404).json({error: 'Usuario no encontrado o credenciales incorrectas'}); // Si el resultado es indefinido, devolvemos error.
+        if(result.id === undefined) return res.status(404).json({error: 'Usuario no encontrado o credenciales incorrectas'}); // Si el resultado es indefinido, devolvemos error.
 
-        const token = jwt.sign({id: result[0].id}, secret_key, {expiresIn: 86400});
+        const token = jwt.sign({id: result.id}, secret_key, {expiresIn: 86400});
             printMessage('Un usuario accedio correctamente a su cuenta');
-            return res.json(token);// Si no, creamos un token  y lo retornamos
+            return res.json({token: token, user: {id: result.id, rol: result.rol}});// Si no, creamos un token  y lo retornamos
     } catch (error) {
         printMessage(error);
     }

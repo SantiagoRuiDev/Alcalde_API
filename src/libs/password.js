@@ -19,5 +19,6 @@ export async function comparePassword(password, correo){
 
     const compare = await bcrypt.compare(password, encryptedPassword);
 
+    connection.end();
     return compare;
 }

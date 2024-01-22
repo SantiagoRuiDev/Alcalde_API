@@ -47,6 +47,7 @@ export const validarEscritor = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
 
+    connection.end();
     if(result[0].rol == 'escritor' || result[0].rol == 'moderador' || result[0].rol == 'admin' || result[0].rol == 'superadmin')  return next();
 
     return res.status(403).json({"error": 'No tienes permisos para realizar esta acción'});
@@ -60,6 +61,7 @@ export const validarModerador = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
 
+    connection.end();
     if(result[0].rol == 'moderador' || result[0].rol == 'admin' || result[0].rol == 'superadmin')  return next();
 
     return res.status(403).json({"error": 'No tienes permisos para realizar esta acción'});
@@ -73,6 +75,7 @@ export const validarAdmin = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
 
+    connection.end();
     if(result[0].rol == 'superadmin' || result[0].rol == 'admin')  return next();
 
     return res.status(403).json({"error": 'No tienes permisos para realizar esta acción'});
@@ -87,6 +90,7 @@ export const validarSuperAdmin = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
 
+    connection.end();
     if(result[0].rol == 'superadmin')  return next();
 
     return res.status(403).json({"error": 'No tienes permisos para realizar esta acción'});
@@ -100,6 +104,7 @@ export const validarBan = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT ban FROM usuarios WHERE id = ?', [decoded.id]);
 
+    connection.end();
     if(result[0].ban == 0) return next();
 
     return res.status(500).json({"error": 'Tu cuenta ha sido baneada'});
@@ -112,6 +117,7 @@ export const usuarioAdministrador = async (req, res, next) => {
     const connection = await connectDatabase();
     const [result] = await connection.execute('SELECT rol FROM usuarios WHERE id = ?', [decoded.id]);
 
+    connection.end();
     if(result[0].rol=='moderador' || result[0].rol=='admin' || result[0].rol=='superadmin') return res.json({admin: true});
 
     return res.json({admin: false});
