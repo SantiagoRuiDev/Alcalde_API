@@ -14,12 +14,16 @@ export const getUserPreferences = async (id) => {
     const connection = await connectDatabase();
     const [result] = await connection.query("SELECT * FROM historial WHERE id_usuario = ? ORDER BY visitas DESC LIMIT 1 ", [id]);
 
-    const [fetchResena] = await connection.query("SELECT * FROM resena WHERE id = ?", [result[0].id_resena]);
+    if(result.length > 0){
+        const [fetchResena] = await connection.query("SELECT * FROM resena WHERE id = ?", [result[0].id_resena]);
 
-    const [etiquetas] = await connection.query("SELECT etiquetas FROM detalles WHERE id = ?", [fetchResena[0].id_detalles]);
-
+        const [etiquetas] = await connection.query("SELECT etiquetas FROM detalles WHERE id = ?", [fetchResena[0].id_detalles]);
+    
+        connection.end();
+        return etiquetas;
+    }
     connection.end();
-    return etiquetas;
+    return [{etiquetas: ''}];
 }
 
 export const getResenaById = async (id) => {

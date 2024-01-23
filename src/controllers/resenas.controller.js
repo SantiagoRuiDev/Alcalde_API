@@ -14,8 +14,8 @@ export const getResenas = async (req, res) => {
     if(viewerIsLogged) {
         const token = req.headers["x-access-token"];
         const decoded = jwt.verify(token, config.secret);
-        const userPreferences = await resenasModel.getUserPreferences(req.id);
         req.id = decoded.id;
+        const userPreferences = await resenasModel.getUserPreferences(req.id);
         if(resenas.length > 0) return res.status(200).json({resenas: resenas, userPreferences: userPreferences});
     }
     printMessage("Se intento acceder a las reseñas exitosamente");
