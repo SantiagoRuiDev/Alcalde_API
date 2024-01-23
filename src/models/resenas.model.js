@@ -17,6 +17,8 @@ export const getUserPreferences = async (id) => {
     if(result.length > 0){
         const [fetchResena] = await connection.query("SELECT * FROM resena WHERE id = ?", [result[0].id_resena]);
 
+        if(fetchResena.length == 0) return [{etiquetas: ''}];
+
         const [etiquetas] = await connection.query("SELECT etiquetas FROM detalles WHERE id = ?", [fetchResena[0].id_detalles]);
     
         connection.end();
@@ -198,6 +200,20 @@ export const historialUsuario = async (id, user) => {
 export const deleteResena = async (id) => {
     const connection = await connectDatabase();
     const [result] = await connection.query("DELETE FROM resena WHERE id = ?", [id]);
+
+    await connection.query("DELETE FROM historial WHERE id_resena = ?", [id]);
+    await connection.query("DELETE FROM resena_comentarios WHERE id_resena = ?", [id]);
+    await connection.query("DELETE FROM resena_motor WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM resena_perfomance WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM resena_chasis WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM resena_medidas WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM resena_entretenimiento WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM resena_seguridad WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM resena_confort WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM carrete WHERE id_resena = ?", [id]);
+    await connection.query("DELETE FROM versus WHERE coche1_id = ? OR coche2_id = ?", [id, id]);
+    await connection.query("DELETE FROM coches WHERE resena_id = ?", [id]);
+    await connection.query("DELETE FROM calificaciones WHERE id_resena = ?", [id]);
 
     connection.end();
     return result.affectedRows;
