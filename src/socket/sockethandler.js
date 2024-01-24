@@ -1,6 +1,6 @@
 import fs from "fs";
 import { Server } from "socket.io"; // Importar Server de Socket.io
-import { deleteMessage, like, getForo, createMessage, createReply, deleteReply } from "../messenger/message.js";
+import { deleteMessage, like, getForo, createMessage, createReply, deleteReply, visitarResena } from "../messenger/message.js";
 
 function init(server){
 
@@ -12,6 +12,7 @@ function init(server){
         socket.on('joinResena', async (room) => {
             socket.join(room);
 
+            const resena = await visitarResena(room);
             io.to(room).emit('resenaUpdate', room);
         })
 

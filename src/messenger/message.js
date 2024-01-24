@@ -1,12 +1,21 @@
 import * as forosModel from "../models/foros.model.js";
 import * as strikesModel from "../models/strikes.model.js";
 import * as usuariosModel from "../models/usuarios.model.js";
+import * as resenaModel from "../models/resenas.model.js";
 import { connectDatabase } from '../database/db.js';
 import jwt from "jsonwebtoken";
 
 import * as config from "../libs/config.js";
 
 const secret_key = config.secret;
+
+export const visitarResena = async (id) => {
+  try {
+    return await resenaModel.incrementarVisitas(id);
+  } catch (error) {
+    return { status: 0, error: error.message };
+  }
+}
 
 export const like = async (data) => {
   try {

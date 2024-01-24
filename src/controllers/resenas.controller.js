@@ -42,7 +42,6 @@ export const getResenaById = async (req, res) => {
     const confort = await resenasModel.getResenaConfort(req.params.id);
     const perfomance = await resenasModel.getResenaPerfomance(req.params.id);
 
-    await resenasModel.incrementarVisitas(req.params.id);
     if(viewerIsLogged) {
         await resenasModel.historialUsuario(req.params.id, req.id);
     }
@@ -60,7 +59,6 @@ export const getResenaInfoById = async (req, res) => {
     }
 
     const resena = await resenasModel.getResenaInfoById(req.params.id);
-    await resenasModel.incrementarVisitas(req.params.id);
     if(viewerIsLogged) {
         await resenasModel.historialUsuario(req.params.id, req.id);
     }
