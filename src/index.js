@@ -29,7 +29,6 @@ import { createServer } from "http";
 // Llamamos dependencias aqui arriba.
 import { uploadFile, handleUpload } from './socket/uploadhandler.js';
 import * as socketHandler from "./socket/sockethandler.js";
-import { Server } from "socket.io"; // Importar Server de Socket.io
 
 
 const app = express();
@@ -39,13 +38,7 @@ app.use(cors()); // Cors para evitar que se bloquee el acceso a la api.
 app.use(express.json());
 
 const httpServer = createServer(app);
-const io = new Server (httpServer, {
-    cors: {
-        origin: '*',
-    }
-});
-
-socketHandler.init(io);
+const io = socketHandler.init(httpServer);
 
 
 // Declaramos y llamamos a funciones de las dependencias.
