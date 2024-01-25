@@ -32,6 +32,14 @@ import * as socketHandler from "./socket/sockethandler.js";
 
 
 const app = express();
+const corsOptions = {
+  credentials: true,
+  origin: ['https://main--fanciful-yeot-6c1a30.netlify.app']
+};
+
+
+app.use(cors(corsOptions)); // Cors para evitar que se bloquee el acceso a la api.
+app.use(express.json());
 
 const httpServer = createServer(app);
 const io = socketHandler.init(httpServer);
@@ -40,25 +48,7 @@ const io = socketHandler.init(httpServer);
 const printMessage = debug('app:servidor');
 
 // Usamos el express json para poder transformar los datos que nos llegan a json.
-app.use(express.json());
-
-const corsOptions = {
-  credentials: true,
-  origin: '*'
-};
-
-
-
-app.use(cors(corsOptions)); // Cors para evitar que se bloquee el acceso a la api.
 app.use('/images', express.static('images')); // Con este ruteo podemos acceder a las imagenes alojadas en el server.
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://main--fanciful-yeot-6c1a30.netlify.app");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Credentials", 'true');
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-  next();
-});
 
 // Creamos redirecciones.
 app.use('/api/usuario', usuariosRouter);
