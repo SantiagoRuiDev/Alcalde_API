@@ -2,9 +2,7 @@ import fs from "fs";
 import { Server } from "socket.io"; // Importar Server de Socket.io
 import { deleteMessage, like, getForo, createMessage, createReply, deleteReply, visitarResena } from "../messenger/message.js";
 
-function init(server){
-
-    const io = new Server(server, { cors: { origin: "*" } });
+function init(io){
 
     io.on("connection", (socket) => {
 

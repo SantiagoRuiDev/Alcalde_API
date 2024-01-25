@@ -29,20 +29,18 @@ import { createServer } from "http";
 // Llamamos dependencias aqui arriba.
 import { uploadFile, handleUpload } from './socket/uploadhandler.js';
 import * as socketHandler from "./socket/sockethandler.js";
+import { Server } from "socket.io"; // Importar Server de Socket.io
 
 
 const app = express();
-const corsOptions = {
-  credentials: true,
-  origin: ['https://main--fanciful-yeot-6c1a30.netlify.app']
-};
 
 
-app.use(cors(corsOptions)); // Cors para evitar que se bloquee el acceso a la api.
+app.use(cors()); // Cors para evitar que se bloquee el acceso a la api.
 app.use(express.json());
 
 const httpServer = createServer(app);
-const io = socketHandler.init(httpServer);
+const io = new Server({ cors: { origin: "*" } });
+socketHandler.init(io);
 
 // Declaramos y llamamos a funciones de las dependencias.
 const printMessage = debug('app:servidor');
