@@ -6,6 +6,14 @@ import { uploadImageChat } from '../libs/imageMessages.js';
 
 const router = Router();
 
+router.use((req, res, next) => {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
+
 router.get('/', validarLogin, getVersus);
 router.get('/:id', validarLogin, getVersusById);
 router.post('/crear/', validarLogin, validarBan, uploadImage('image'), createVersus);

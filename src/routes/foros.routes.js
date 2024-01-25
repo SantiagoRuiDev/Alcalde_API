@@ -5,6 +5,15 @@ import { validarAdmin, validarLogin, validarModerador } from "../middlewares/usu
 
 const router = Router();
 
+router.use((req, res, next) => {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
+
+
 router.get('/', listarForos);
 router.get('/regla', getReglas);
 router.get('/:id', listarForo);
