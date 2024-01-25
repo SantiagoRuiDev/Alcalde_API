@@ -44,7 +44,7 @@ app.use(express.json());
 
 const corsOptions = {
   credentials: true,
-  origin: ['http://localhost:5000', 'https://main--fanciful-yeot-6c1a30.netlify.app'] // Whitelist the domains you want to allow
+  origin: '*'
 };
 
 
@@ -55,6 +55,8 @@ app.use('/images', express.static('images')); // Con este ruteo podemos acceder 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "https://main--fanciful-yeot-6c1a30.netlify.app");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Credentials", 'true');
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 });
 
