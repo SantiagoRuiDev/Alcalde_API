@@ -39,8 +39,6 @@ app.use(cors()); // Cors para evitar que se bloquee el acceso a la api.
 app.use(express.json());
 
 const httpServer = createServer(app);
-const io = new Server({ cors: { origin: "*" } });
-socketHandler.init(io);
 
 // Declaramos y llamamos a funciones de las dependencias.
 const printMessage = debug('app:servidor');
