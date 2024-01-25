@@ -5,7 +5,8 @@
   "description": "API Rest - Aplicacion Alcalde",
   "main": "index.js",
   "scripts": {
-    "dev": "set DEBUG=app:* & nodemon src/index.js"
+    "dev": "set DEBUG=app:* & nodemon src/index.js",
+    "deploy": "node src/index.js"
   },
   "keywords": [],
   "author": "",
