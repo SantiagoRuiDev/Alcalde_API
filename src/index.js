@@ -48,8 +48,15 @@ const corsOptions = {
 };
 
 
+
 app.use(cors(corsOptions)); // Cors para evitar que se bloquee el acceso a la api.
 app.use('/images', express.static('images')); // Con este ruteo podemos acceder a las imagenes alojadas en el server.
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://main--fanciful-yeot-6c1a30.netlify.app");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Creamos redirecciones.
 app.use('/api/usuario', usuariosRouter);
