@@ -5,7 +5,6 @@ import * as config from '../libs/config.js';
 const printMessage = debug('app:database');
 // Importamos debug, para enviar mensajes a la consola y importamos mysql para conenctarnos a la db.
 
-
 // Funcion asincrona para conectarse a la db
 async function connectDatabase() {
     try {
@@ -13,8 +12,10 @@ async function connectDatabase() {
             host: config.host,
             user: config.user,
             password: config.password,
-            database: config.database
-        });
+            database: config.database,
+            ssl: false,
+            connectTimeout: 60000
+        });        
 
         printMessage("Conectado a la base de datos");
         return connection;

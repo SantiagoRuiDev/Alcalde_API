@@ -28,7 +28,9 @@ export const buscarArticulo = async (cc) => {
 
 export const crearArticulo = async (data) => {
     const connection = await connectDatabase();
-    const [result] = await connection.query('INSERT INTO articulos(id_usuario, titulo, subtitulo, contenido, portada) VALUES  (?, ?, ?, ?, ?)', [data.id_usuario, data.titulo, data.subtitulo, data.contenido, data.portada]);
+    // crear fecha YYYY-MM-DD
+    const fecha = new Date().toISOString().slice(0, 10);
+    const [result] = await connection.query('INSERT INTO articulos(id_usuario, titulo, subtitulo, contenido, fecha, portada) VALUES  (?, ?, ?, ?, ?)', [data.id_usuario, data.titulo, data.subtitulo, data.contenido, fecha, data.portada]);
 
     connection.end();
     return result.affectedRows;
