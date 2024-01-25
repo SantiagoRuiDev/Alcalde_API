@@ -4,7 +4,7 @@ import { deleteMessage, like, getForo, createMessage, createReply, deleteReply, 
 
 function init(server){
 
-    socket = new Server (server, { cors: { origin: '*' } });
+    const io = new Server (server, { cors: { origin: '*' } });
 
     io.on("connection", (socket) => {
 
