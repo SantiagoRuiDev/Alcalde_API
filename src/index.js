@@ -41,7 +41,14 @@ const printMessage = debug('app:servidor');
 
 // Usamos el express json para poder transformar los datos que nos llegan a json.
 app.use(express.json());
-app.use(cors()); // Cors para evitar que se bloquee el acceso a la api.
+
+const corsOptions = {
+  credentials: true,
+  origin: ['http://localhost:5000', 'https://main--fanciful-yeot-6c1a30.netlify.app'] // Whitelist the domains you want to allow
+};
+
+
+app.use(cors(corsOptions)); // Cors para evitar que se bloquee el acceso a la api.
 app.use('/images', express.static('images')); // Con este ruteo podemos acceder a las imagenes alojadas en el server.
 
 // Creamos redirecciones.
