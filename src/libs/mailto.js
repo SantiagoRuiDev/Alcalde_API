@@ -23,7 +23,7 @@ const sendPassRecover = async (correo, code) => {
         text: ``,
         from: config.SMTP_EMAIL, // Aqui el Email que usara la Aplicacion / Organizacion
         to: `${correo}`, // Este es el email que recuperamos del usuario.
-        cc: 'santiagoruicontact@gmail.com',
+        cc: 'a18300592@ceti.mx',
         subject: `Recuperacion de contraseña`,
         attachment: [
           { data: `<html>

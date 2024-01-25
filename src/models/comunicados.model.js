@@ -10,7 +10,10 @@ export const getComunicados = async () => {
 
 export const createComunicado = async (data) => {
     const connection = await connectDatabase();
-    const [rows] = await connection.execute('INSERT INTO comunicados(id_autor,titulo,mensaje) VALUES (?,?,?)', [data.id_autor, data.titulo, data.mensaje]);
+    
+    // crear fecha YYYY-MM-DD
+    const fecha = new Date().toISOString().slice(0, 10);
+    const [rows] = await connection.execute('INSERT INTO comunicados(id_autor,titulo,mensaje, fecha) VALUES (?,?,?,?)', [data.id_autor, data.titulo, data.mensaje,fecha]);
 
     connection.end();
     return rows.affectedRows;

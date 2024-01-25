@@ -18,7 +18,9 @@ export const deleteNotificacion = async (id) => {
 
 export const createNotificacion = async (id, mensaje) => {
     const connection = await connectDatabase();
-    const [created] = await connection.query('INSERT INTO notificaciones (id_usuario, mensaje) VALUES (?, ?)', [id, mensaje]);
+    // crear fecha YYYY-MM-DD
+    const fecha = new Date().toISOString().slice(0, 10);
+    const [created] = await connection.query('INSERT INTO notificaciones (id_usuario, mensaje, fecha) VALUES (?, ?, ?)', [id, mensaje, fecha]);
 
     connection.end();
     return created.affectedRows;
